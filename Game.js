@@ -13,22 +13,8 @@ var SMOKE_THRUST = 0.8;		//how fast the bullets move
 var TURN_FACTOR = 9;		//how far the ship turns per frame
 var BULLET_SPEED = 17;		//how fast the bullets move
 
-var KEYCODE_ENTER = 13;		//useful keycode
-var KEYCODE_SPACE = 32;		//useful keycode
-var KEYCODE_UP = 38;		//useful keycode
-var KEYCODE_LEFT = 37;		//useful keycode
-var KEYCODE_RIGHT = 39;		//useful keycode
-var KEYCODE_W = 87;			//useful keycode
-var KEYCODE_A = 65;			//useful keycode
-var KEYCODE_D = 68;			//useful keycode
-
 var manifest;           // used to register sounds for preloading
 var preload;
-
-var shootHeld;			//is the user holding a shoot command
-var lfHeld;				//is the user holding a turn left command
-var rtHeld;				//is the user holding a turn right command
-var fwdHeld;			//is the user holding a forward command
 
 var timeToRock;			//difficulty adjusted version of ROCK_TIME
 var nextRock;			//ticks left until a new space rock arrives
@@ -51,8 +37,8 @@ var scoreField;			//score Field
 var loadingInterval = 0;
 
 //register key functions
-document.onkeydown = handleKeyDown;
-document.onkeyup = handleKeyUp;
+document.onkeydown = Controller.handleKeyDown;
+document.onkeyup = Controller.handleKeyUp;
 
 function init() {
 	if (!createjs.Sound.initializeDefaultPlugins()) {
@@ -130,7 +116,7 @@ function watchRestart() {
 	//watch for clicks
 	stage.addChild(messageField);
 	stage.update(); 	//update the stage to show text
-	canvas.onclick = handleClick;
+	canvas.onclick = Controller.handleClick;
 }
 
 //reset all game logic
@@ -156,7 +142,7 @@ function restart() {
 	nextRock = nextBullet = 0;
 
 	//reset key presses
-	shootHeld = lfHeld = rtHeld = fwdHeld = dnHeld = false;
+	Controller.clearState();
 
 	//ensure stage is blank and add the ship
 	stage.clear();
@@ -171,7 +157,7 @@ function restart() {
 function tick(event) {
 	//handle firing
 	if (nextBullet <= 0) {
-		if (alive && shootHeld) {
+		if (alive && Controller.State.shootHeld) {
 			nextBullet = BULLET_TIME;
 			fireShotgun();
 		}
@@ -180,14 +166,14 @@ function tick(event) {
 	}
 
 	//handle turning
-	if (alive && lfHeld) {
+	if (alive && Controller.State.lfHeld) {
 		ship.rotation -= TURN_FACTOR;
-	} else if (alive && rtHeld) {
+	} else if (alive && Controller.State.rtHeld) {
 		ship.rotation += TURN_FACTOR;
 	}
 
 	//handle thrust
-	if (alive && fwdHeld) {
+	if (alive && Controller.State.fwdHeld) {
 		ship.accelerate();
 	}
 
@@ -492,73 +478,6 @@ function getSmokeParticle() {
 
 	stage.addChild(smokeParticles[i]);
 	return i;
-}
-
-/* KEYBOARD ---------------------------------------------------------------- */
-
-//allow for WASD and arrow control scheme
-function handleKeyDown(e) {
-	//cross browser issues exist
-	if (!e) {
-		var e = window.event;
-	}
-	switch (e.keyCode) {
-		case KEYCODE_SPACE:
-			shootHeld = true;
-			return false;
-		case KEYCODE_A:
-		case KEYCODE_LEFT:
-			lfHeld = true;
-			return false;
-		case KEYCODE_D:
-		case KEYCODE_RIGHT:
-			rtHeld = true;
-			return false;
-		case KEYCODE_W:
-		case KEYCODE_UP:
-			fwdHeld = true;
-			return false;
-		case KEYCODE_ENTER:
-			if (canvas.onclick == handleClick) {
-				handleClick();
-			}
-			return false;
-	}
-}
-
-function handleKeyUp(e) {
-	//cross browser issues exist
-	if (!e) {
-		var e = window.event;
-	}
-	switch (e.keyCode) {
-		case KEYCODE_SPACE:
-			shootHeld = false;
-			break;
-		case KEYCODE_A:
-		case KEYCODE_LEFT:
-			lfHeld = false;
-			break;
-		case KEYCODE_D:
-		case KEYCODE_RIGHT:
-			rtHeld = false;
-			break;
-		case KEYCODE_W:
-		case KEYCODE_UP:
-			fwdHeld = false;
-			break;
-	}
-}
-
-function handleClick() {
-	//prevent extra clicks and hide text
-	canvas.onclick = null;
-	stage.removeChild(messageField);
-
-	// indicate the player is now on screen
-	createjs.Sound.play("begin", {volume: Sound.VOLUME});
-
-	restart();
 }
 
 function addScore(value) {
