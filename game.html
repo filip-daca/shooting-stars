@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Shooting Stars 0.2</title>
+		
+		<script src="assets/jquery/jquery-3.2.1.min.js"></script>
+		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/createjs/createjs-2015.11.26.min.js"></script>
+		
+		<script src="Sound.js"></script>
+		<script src="Ship.js"></script>
+		<script src="SpaceRock.js"></script>
+		<script src="Background.js"></script>
+		<script src="Game.js"></script>
+		
+		<script type="text/javascript">		
+			$(function() {
+				init();
+			});
+		</script>
+
+		<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/ie/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+		<link href="css/shooting_stars.css" rel="stylesheet">
+		<script src="assets/ie/js/ie-emulation-modes-warning.js"></script>
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<script src="assets/ie/js/ie10-viewport-bug-workaround.js"></script>
+	</head>
+	<body>
+		<h2>Shooting Stars v0.2</h2>
+		
+		<div class="row">
+			<div id="content" class="col-xs-6 col-xs-offset-3">
+				<canvas id="gameCanvas" width="960" height="690" style="background:black;"></canvas>
+			</div>
+		</div>
+		
+		<div class="row">
+			<a class="btn btn-danger" id="toggle-volume">
+				<i class="glyphicon glyphicon-volume-up"></i>
+			</a>
+		</div>
+		<footer>Shooting Stars v0.2</footer>
+	</body>
+</html>
