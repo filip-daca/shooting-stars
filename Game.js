@@ -2,16 +2,12 @@ var DIFFICULTY = 2;			//how fast the game gets mor difficult
 var ROCK_TIME = 110;		//aprox tick count until a new asteroid gets introduced
 var SUB_ROCK_COUNT = 4;		//how many small rocks to make on rock death
 
-var BULLET_TIME = 5;		//ticks between bullets
-var BULLET_ENTROPY = 100;	//how much energy a bullet has before it runs out.
-
 var SMOKE_ENTROPY = 20;		//how much energy a bullet has before it runs out.
 var SMOKE_TIME = 1;			//ticks between bullets
 var SMOKE_SPEED = 15;		//how fast the bullets move
 var SMOKE_THRUST = 0.8;		//how fast the bullets move
 
 var TURN_FACTOR = 9;		//how far the ship turns per frame
-var BULLET_SPEED = 17;		//how fast the bullets move
 
 var manifest;           // used to register sounds for preloading
 var preload;
@@ -19,10 +15,8 @@ var preload;
 var timeToRock;			//difficulty adjusted version of ROCK_TIME
 var nextRock;			//ticks left until a new space rock arrives
 var nextStar;
-var nextBullet;			//ticks left until the next shot is fired
 
 var rockBelt;			//space rock array
-var bulletStream;		//bullet array
 var smokeParticles;		//smoke particles array
 
 var canvas;			//Main canvas
@@ -128,7 +122,7 @@ function restart() {
 
 	//new arrays to dump old data
 	rockBelt = [];
-	bulletStream = [];
+	Weapons.init();
 	smokeParticles = [];
 
 	//create the player
@@ -139,7 +133,7 @@ function restart() {
 
 	//log time untill values
 	timeToRock = ROCK_TIME;
-	nextRock = nextBullet = 0;
+	nextRock = 0;
 
 	//reset key presses
 	Controller.clearState();
@@ -155,15 +149,6 @@ function restart() {
 }
 
 function tick(event) {
-	//handle firing
-	if (nextBullet <= 0) {
-		if (alive && Controller.State.shootHeld) {
-			nextBullet = BULLET_TIME;
-			fireShotgun();
-		}
-	} else {
-		nextBullet--;
-	}
 
 	//handle turning
 	if (alive && Controller.State.lfHeld) {
@@ -194,21 +179,6 @@ function tick(event) {
 		placeInBounds(ship, ship.bounds);
 	}
 
-	//handle bullet movement
-	for (bullet in bulletStream) {
-		var o = bulletStream[bullet];
-		if (!o || !o.active) {
-			continue;
-		}
-		o.x += Math.sin(o.rotation * (Math.PI / -180)) * BULLET_SPEED;
-		o.y += Math.cos(o.rotation * (Math.PI / -180)) * BULLET_SPEED;
-
-		if (--o.entropy <= 0) {
-			stage.removeChild(o);
-			o.active = false;
-		}
-	}
-
 	//handle spaceRocks (nested in one loop to prevent excess loops)
 	for (spaceRock in rockBelt) {
 		var o = rockBelt[spaceRock];
@@ -227,10 +197,10 @@ function tick(event) {
 			breakRock(o);
 			continue;
 		}
-
+		
 		//handle spaceRock bullet collisions
-		for (bullet in bulletStream) {
-			var p = bulletStream[bullet];
+		for (bullet in Weapons.bulletStream) {
+			var p = Weapons.bulletStream[bullet];
 			if (!p || !p.active) {
 				continue;
 			}
@@ -240,7 +210,7 @@ function tick(event) {
 
 				// remove
 				stage.removeChild(p);
-				bulletStream[bullet].active = false;
+				Weapons.bulletStream[bullet].active = false;
 			}
 		}
 	}
@@ -272,6 +242,7 @@ function tick(event) {
 	}
 
 	//call sub ticks
+	Weapons.tick(event);
 	ship.tick(event);
 	Background.tick(event);
 	stage.update(event);
@@ -353,57 +324,7 @@ function breakRock(o) {
 	rockBelt[spaceRock].active = false;
 }
 
-function fireBullet() {
-	//create the bullet
-	var o = bulletStream[getBullet()];
-	o.x = ship.x;
-	o.y = ship.y;
-	o.rotation = ship.rotation;
-	o.entropy = BULLET_ENTROPY;
-	o.active = true;
 
-	//draw the bullet
-	o.graphics.beginStroke("#FF33FF").drawCircle(0,0,3);
-
-	// play the shot sound
-	createjs.Sound.play("laser", {interrupt: createjs.Sound.INTERUPT_LATE, volume: Sound.VOLUME});
-}
-
-function fireShotgun() {
-	var i = 5;
-	while (i > 0) {
-		//create the bullet
-		var o = bulletStream[getBullet()];
-		o.x = ship.x;
-		o.y = ship.y;
-		o.rotation = ship.rotation + i*3 - 9;
-		o.entropy = BULLET_ENTROPY;
-		o.active = true;
-
-		//draw the bullet
-		o.graphics.beginStroke("#FF33FF").drawCircle(0,0,3);
-		i--;
-	}
-	
-	// play the shot sound
-	createjs.Sound.play("laser", {interrupt: createjs.Sound.INTERUPT_LATE, volume: Sound.VOLUME});
-}
-
-function fireLaser() {
-	//create the bullet
-	var o = bulletStream[getBullet()];
-	o.x = ship.x;
-	o.y = ship.y;
-	o.rotation = ship.rotation;
-	o.entropy = BULLET_ENTROPY;
-	o.active = true;
-
-	//draw the bullet
-	o.graphics.beginStroke("#FF33FF").beginFill("#FF33FF").drawCircle(0,0,5);
-
-	// play the shot sound
-	createjs.Sound.play("laser", {interrupt: createjs.Sound.INTERUPT_LATE, volume: Sound.VOLUME});
-}
 
 function getSpaceRock(size) {
 	var i = 0;
@@ -427,31 +348,6 @@ function getSpaceRock(size) {
 	}
 
 	stage.addChild(rockBelt[i]);
-	return i;
-}
-
-function getBullet() {
-	var i = 0;
-	var len = bulletStream.length;
-
-	//pooling approach
-	while (i <= len) {
-		if (!bulletStream[i]) {
-			bulletStream[i] = new createjs.Shape();
-			break;
-		} else if (!bulletStream[i].active) {
-			bulletStream[i].active = true;
-			break;
-		} else {
-			i++;
-		}
-	}
-
-	if (len == 0) {
-		bulletStream[0] = new createjs.Shape();
-	}
-
-	stage.addChild(bulletStream[i]);
 	return i;
 }
 

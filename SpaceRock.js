@@ -57,7 +57,7 @@
 			this.hit = (this.hit + radius) / 2;					//running average
 		}
 		
-		this.cache(-this.bounds,-this.bounds,3*this.bounds,3*this.bounds);
+		this.cache(-this.bounds,-this.bounds,2*this.bounds,2*this.bounds,2);
 
 		this.graphics.closePath(); // draw the last line segment back to the start point.
 		this.hit *= 1.1; //pad a bit

@@ -99,6 +99,16 @@
 			this.shipFlame.alpha = 0;
 			this.thrust = 0;
 		}
+		
+		//handle firing
+		if (Weapons.nextBullet <= 0) {
+			if (alive && Controller.State.shootHeld) {
+				Weapons.nextBullet = Weapons.Config.BULLET_TIME;
+				Weapons.fireShotgun(this);
+			}
+		} else {
+			Weapons.nextBullet--;
+		}
 	}
 
 	p.accelerate = function () {
@@ -133,8 +143,6 @@
 
 		//draw smoke particle
 		o.graphics.beginStroke("#888888").beginFill("#888888").drawCircle(0,0,2);
-		
-		o.cache(-3,-3,6,6);
 	}
 
 	window.Ship = createjs.promote(Ship, "Container");
