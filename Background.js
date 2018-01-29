@@ -22,7 +22,7 @@ var Background = {
 			}
 			
 			//handle stars movement and looping
-			if (outOfBounds(o, o.bounds)) {
+			if (Engine.outOfBounds(o, o.bounds)) {
 				stage.removeChild(o);
 				o.active = false;
 			}

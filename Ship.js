@@ -109,6 +109,23 @@
 		} else {
 			Weapons.nextBullet--;
 		}
+		
+		//handle ship looping
+		if (alive && Engine.outOfBounds(this, this.bounds)) {
+			Engine.placeInBounds(this, this.bounds);
+		}
+		
+		//handle turning
+		if (alive && Controller.State.lfHeld) {
+			this.rotation -= TURN_FACTOR;
+		} else if (alive && Controller.State.rtHeld) {
+			this.rotation += TURN_FACTOR;
+		}
+
+		//handle thrust
+		if (alive && Controller.State.fwdHeld) {
+			this.accelerate();
+		}
 	}
 
 	p.accelerate = function () {

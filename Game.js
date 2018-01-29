@@ -1,5 +1,4 @@
-var DIFFICULTY = 2;			//how fast the game gets mor difficult
-var ROCK_TIME = 110;		//aprox tick count until a new asteroid gets introduced
+var DIFFICULTY = 2;			//how fast the game gets more difficult
 var SUB_ROCK_COUNT = 4;		//how many small rocks to make on rock death
 
 var SMOKE_ENTROPY = 20;		//how much energy a bullet has before it runs out.
@@ -12,11 +11,8 @@ var TURN_FACTOR = 9;		//how far the ship turns per frame
 var manifest;           // used to register sounds for preloading
 var preload;
 
-var timeToRock;			//difficulty adjusted version of ROCK_TIME
-var nextRock;			//ticks left until a new space rock arrives
 var nextStar;
 
-var rockBelt;			//space rock array
 var smokeParticles;		//smoke particles array
 
 var canvas;			//Main canvas
@@ -120,8 +116,7 @@ function restart() {
 	scoreField.text = (0).toString();
 	stage.addChild(scoreField);
 
-	//new arrays to dump old data
-	rockBelt = [];
+	SpaceRocks.init();
 	Weapons.init();
 	smokeParticles = [];
 
@@ -130,10 +125,6 @@ function restart() {
 	ship = new Ship();
 	ship.x = canvas.width / 2;
 	ship.y = canvas.height / 2;
-
-	//log time untill values
-	timeToRock = ROCK_TIME;
-	nextRock = 0;
 
 	//reset key presses
 	Controller.clearState();
@@ -149,71 +140,6 @@ function restart() {
 }
 
 function tick(event) {
-
-	//handle turning
-	if (alive && Controller.State.lfHeld) {
-		ship.rotation -= TURN_FACTOR;
-	} else if (alive && Controller.State.rtHeld) {
-		ship.rotation += TURN_FACTOR;
-	}
-
-	//handle thrust
-	if (alive && Controller.State.fwdHeld) {
-		ship.accelerate();
-	}
-
-	//handle new spaceRocks
-	if (nextRock <= 0) {
-		if (alive) {
-			timeToRock -= DIFFICULTY;	//reduce spaceRock spacing slowly to increase difficulty with time
-			var index = getSpaceRock(SpaceRock.LRG_ROCK);
-			rockBelt[index].floatOnScreen(canvas.width, canvas.height);
-			nextRock = timeToRock + timeToRock * Math.random();
-		}
-	} else {
-		nextRock--;
-	}
-
-	//handle ship looping
-	if (alive && outOfBounds(ship, ship.bounds)) {
-		placeInBounds(ship, ship.bounds);
-	}
-
-	//handle spaceRocks (nested in one loop to prevent excess loops)
-	for (spaceRock in rockBelt) {
-		var o = rockBelt[spaceRock];
-		if (!o || !o.active) {
-			continue;
-		}
-
-		//handle spaceRock movement and looping
-		if (outOfBounds(o, o.bounds)) {
-			placeInBounds(o, o.bounds);
-		}
-		o.tick(event);
-
-		//handle spaceRock ship collisions
-		if (alive && o.hitRadius(ship.x, ship.y, ship.hit)) {
-			breakRock(o);
-			continue;
-		}
-		
-		//handle spaceRock bullet collisions
-		for (bullet in Weapons.bulletStream) {
-			var p = Weapons.bulletStream[bullet];
-			if (!p || !p.active) {
-				continue;
-			}
-
-			if (o.hitPoint(p.x, p.y)) {
-				breakRock(o);
-
-				// remove
-				stage.removeChild(p);
-				Weapons.bulletStream[bullet].active = false;
-			}
-		}
-	}
 	
 	//handle smoke
 	for (particle in smokeParticles) {
@@ -223,8 +149,8 @@ function tick(event) {
 		}
 		
 		//handle spaceRock movement and looping
-		if (outOfBounds(o, o.bounds)) {
-			placeInBounds(o, o.bounds);
+		if (Engine.outOfBounds(o, o.bounds)) {
+			Engine.placeInBounds(o, o.bounds);
 		}
 		
 		//move by velocity
@@ -242,6 +168,7 @@ function tick(event) {
 	}
 
 	//call sub ticks
+	SpaceRocks.tick(event);
 	Weapons.tick(event);
 	ship.tick(event);
 	Background.tick(event);
@@ -258,97 +185,6 @@ function playerDies() {
 
 	//play death sound
 	createjs.Sound.play("death", {interrupt: createjs.Sound.INTERRUPT_ANY, volume: Sound.VOLUME});
-}
-
-function outOfBounds(o, bounds) {
-	//is it visibly off screen
-	return o.x < bounds * -2 || o.y < bounds * -2 || o.x > canvas.width + bounds * 2 || o.y > canvas.height + bounds * 2;
-}
-
-function placeInBounds(o, bounds) {
-	//if its visual bounds are entirely off screen place it off screen on the other side
-	if (o.x > canvas.width + bounds * 2) {
-		o.x = bounds * -2;
-	} else if (o.x < bounds * -2) {
-		o.x = canvas.width + bounds * 2;
-	}
-
-	//if its visual bounds are entirely off screen place it off screen on the other side
-	if (o.y > canvas.height + bounds * 2) {
-		o.y = bounds * -2;
-	} else if (o.y < bounds * -2) {
-		o.y = canvas.height + bounds * 2;
-	}
-}
-
-function breakRock(o) {
-	var newSize;
-	switch (o.size) {
-		case SpaceRock.LRG_ROCK:
-			newSize = SpaceRock.MED_ROCK;
-			break;
-		case SpaceRock.MED_ROCK:
-			newSize = SpaceRock.SML_ROCK;
-			break;
-		case SpaceRock.SML_ROCK:
-			newSize = 0;
-			break;
-	}
-
-	//score
-	if (alive) {
-		addScore(o.score);
-	}
-
-	//create more
-	if (newSize > 0) {
-		var i;
-		var index;
-		var offSet;
-
-		for (i = 0; i < SUB_ROCK_COUNT; i++) {
-			index = getSpaceRock(newSize);
-			offSet = (Math.random() * o.size * 2) - o.size;
-			rockBelt[index].x = o.x + offSet;
-			rockBelt[index].y = o.y + offSet;
-		}
-	}
-	
-	o.explode();
-	
-	// play sound
-	createjs.Sound.play("break", {interrupt: createjs.Sound.INTERUPT_LATE, offset: 0.8, volume: Sound.VOLUME});
-
-	//remove
-	stage.removeChild(o);
-	rockBelt[spaceRock].active = false;
-}
-
-
-
-function getSpaceRock(size) {
-	var i = 0;
-	var len = rockBelt.length;
-
-	//pooling approach
-	while (i <= len) {
-		if (!rockBelt[i]) {
-			rockBelt[i] = new SpaceRock(size);
-			break;
-		} else if (!rockBelt[i].active) {
-			rockBelt[i].activate(size);
-			break;
-		} else {
-			i++;
-		}
-	}
-
-	if (len == 0) {
-		rockBelt[0] = new SpaceRock(size);
-	}
-
-	stage.addChild(rockBelt[i]);
-	return i;
 }
 
 function getSmokeParticle() {
