@@ -18,6 +18,7 @@
 	var p = createjs.extend(Ship, createjs.Container);
 
 // public properties:
+	Ship.TURN_FACTOR = 9;
 	Ship.TOGGLE = 60;
 	Ship.MAX_THRUST = 2;
 	Ship.MAX_VELOCITY = 7;
@@ -117,9 +118,9 @@
 		
 		//handle turning
 		if (alive && Controller.State.lfHeld) {
-			this.rotation -= TURN_FACTOR;
+			this.rotation -= Ship.TURN_FACTOR;
 		} else if (alive && Controller.State.rtHeld) {
-			this.rotation += TURN_FACTOR;
+			this.rotation += Ship.TURN_FACTOR;
 		}
 
 		//handle thrust
@@ -129,7 +130,7 @@
 	}
 
 	p.accelerate = function () {
-		//increase push ammount for acceleration
+		//increase push amount for acceleration
 		this.thrust += this.thrust + Ship.PUSH_AMMOUNT;
 		if (this.thrust >= Ship.MAX_THRUST) {
 			this.thrust = Ship.MAX_THRUST;
@@ -149,13 +150,13 @@
 	
 	p._addSmoke = function() {
 		//create smoke particle
-		var o = smokeParticles[getSmokeParticle()];
+		var o = ExhaustParticles.allParticles[ExhaustParticles.getSmokeParticle()];
 		o.x = ship.x;
 		o.y = ship.y;
 		o.rotation = ship.rotation + (Math.random() * 16 - 8);
-		o.entropy = SMOKE_ENTROPY;
-		o.vX = -Math.sin(o.rotation * (Math.PI / -180)) * SMOKE_SPEED;
-		o.vY = -Math.cos(o.rotation * (Math.PI / -180)) * SMOKE_SPEED;
+		o.entropy = ExhaustParticles.Config.SMOKE_ENTROPY;
+		o.vX = -Math.sin(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED;
+		o.vY = -Math.cos(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED;
 		o.active = true;
 
 		//draw smoke particle

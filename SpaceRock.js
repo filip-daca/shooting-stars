@@ -146,13 +146,13 @@
 		var i = 100;
 		while (i > 0) {
 			//create smoke particle
-			var o = smokeParticles[getSmokeParticle()];
+			var o = ExhaustParticles.allParticles[ExhaustParticles.getSmokeParticle()];
 			o.x = this.x;
 			o.y = this.y;
 			o.rotation = (Math.random() * 360);
-			o.entropy = SMOKE_ENTROPY * Math.random();
-			o.vX = -Math.sin(o.rotation * (Math.PI / -180)) * SMOKE_SPEED * Math.random();
-			o.vY = -Math.cos(o.rotation * (Math.PI / -180)) * SMOKE_SPEED * Math.random();
+			o.entropy = ExhaustParticles.Config.SMOKE_ENTROPY * Math.random();
+			o.vX = -Math.sin(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED * Math.random();
+			o.vY = -Math.cos(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED * Math.random();
 			o.active = true;
 
 			//draw smoke particle
@@ -161,7 +161,6 @@
 			i-=1;
 		}
 	}
-
 
 	window.SpaceRock = createjs.promote(SpaceRock, "Shape");
 

@@ -1,19 +1,8 @@
 var DIFFICULTY = 2;			//how fast the game gets more difficult
 var SUB_ROCK_COUNT = 4;		//how many small rocks to make on rock death
 
-var SMOKE_ENTROPY = 20;		//how much energy a bullet has before it runs out.
-var SMOKE_TIME = 1;			//ticks between bullets
-var SMOKE_SPEED = 15;		//how fast the bullets move
-var SMOKE_THRUST = 0.8;		//how fast the bullets move
-
-var TURN_FACTOR = 9;		//how far the ship turns per frame
-
 var manifest;           // used to register sounds for preloading
 var preload;
-
-var nextStar;
-
-var smokeParticles;		//smoke particles array
 
 var canvas;			//Main canvas
 var stage;			//Main display stage
@@ -118,7 +107,7 @@ function restart() {
 
 	SpaceRocks.init();
 	Weapons.init();
-	smokeParticles = [];
+	ExhaustParticles.init();
 
 	//create the player
 	alive = true;
@@ -140,38 +129,11 @@ function restart() {
 }
 
 function tick(event) {
-	
-	//handle smoke
-	for (particle in smokeParticles) {
-		var o = smokeParticles[particle];
-		if (!o || !o.active) {
-			continue;
-		}
-		
-		//handle spaceRock movement and looping
-		if (Engine.outOfBounds(o, o.bounds)) {
-			Engine.placeInBounds(o, o.bounds);
-		}
-		
-		//move by velocity
-		o.x += o.vX;
-		o.y += o.vY;
-		
-		//accelerate
-		o.vX *=  SMOKE_THRUST;
-		o.vY *=  SMOKE_THRUST;
-		
-		if (--o.entropy <= 0) {
-			stage.removeChild(o);
-			o.active = false;
-		}
-	}
-
-	//call sub ticks
 	SpaceRocks.tick(event);
 	Weapons.tick(event);
 	ship.tick(event);
 	Background.tick(event);
+	ExhaustParticles.tick(event);
 	stage.update(event);
 }
 
@@ -185,31 +147,6 @@ function playerDies() {
 
 	//play death sound
 	createjs.Sound.play("death", {interrupt: createjs.Sound.INTERRUPT_ANY, volume: Sound.VOLUME});
-}
-
-function getSmokeParticle() {
-	var i = 0;
-	var len = smokeParticles.length;
-
-	//pooling approach
-	while (i <= len) {
-		if (!smokeParticles[i]) {
-			smokeParticles[i] = new createjs.Shape();
-			break;
-		} else if (!smokeParticles[i].active) {
-			smokeParticles[i].active = true;
-			break;
-		} else {
-			i++;
-		}
-	}
-
-	if (len == 0) {
-		smokeParticles[0] = new createjs.Shape();
-	}
-
-	stage.addChild(smokeParticles[i]);
-	return i;
 }
 
 function addScore(value) {
