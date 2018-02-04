@@ -123,6 +123,7 @@ function restart() {
 	stage.addChild(ship);
 
 	//start game timer
+	createjs.Ticker.framerate = 60;
 	if (!createjs.Ticker.hasEventListener("tick")) {
 		createjs.Ticker.addEventListener("tick", tick);
 	}

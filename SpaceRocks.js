@@ -4,7 +4,7 @@
 var SpaceRocks = {
 	
 	Config: {
-		ROCK_TIME: 110,							//approximate tick count until a new asteroid gets introduced
+		ROCK_TIME: 220,							//approximate tick count until a new asteroid gets introduced
 	},
 		
 	allRocks: [],
@@ -136,7 +136,7 @@ var SpaceRocks = {
 		createjs.Sound.play("break", {interrupt: createjs.Sound.INTERUPT_LATE, offset: 0.8, volume: Sound.VOLUME});
 
 		//remove
-		stage.removeChild(o);
+		Engine.remove(o);
 		SpaceRocks.allRocks[spaceRock].active = false;
 	},
 };

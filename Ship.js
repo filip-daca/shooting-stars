@@ -18,11 +18,11 @@
 	var p = createjs.extend(Ship, createjs.Container);
 
 // public properties:
-	Ship.TURN_FACTOR = 9;
+	Ship.TURN_FACTOR = 4;
 	Ship.TOGGLE = 60;
-	Ship.MAX_THRUST = 2;
-	Ship.MAX_VELOCITY = 7;
-	Ship.PUSH_AMMOUNT = 0.5;
+	Ship.MAX_THRUST = 0.6;
+	Ship.MAX_VELOCITY = 5;
+	Ship.PUSH_AMMOUNT = 0.3;
 
 // public properties:
 	p.shipFlame;
@@ -49,7 +49,7 @@
 		g.lineTo(5, -6);	//rfin
 		g.lineTo(0, -2);	//notch
 		g.lineTo(-5, -6);	//lfin
-		g.closePath(); // nose
+		g.closePath(); 		// nose
 
 
 		//draw ship flame
@@ -153,7 +153,7 @@
 		var o = ExhaustParticles.allParticles[ExhaustParticles.getSmokeParticle()];
 		o.x = ship.x;
 		o.y = ship.y;
-		o.rotation = ship.rotation + (Math.random() * 16 - 8);
+		o.rotation = ship.rotation + (Math.random() * 12 - 6);
 		o.entropy = ExhaustParticles.Config.SMOKE_ENTROPY;
 		o.vX = -Math.sin(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED;
 		o.vY = -Math.cos(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED;

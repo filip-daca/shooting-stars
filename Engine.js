@@ -7,6 +7,12 @@ var Engine = {
 		
 	},
 	
+	remove: function(o) {
+		o.graphics.clear();
+		stage.removeChild(o);
+		o.active = false;
+	},
+	
 	outOfBounds: function(o, bounds) {
 		// is it visibly off screen
 		return o.x < bounds * -2 || o.y < bounds * -2 || o.x > canvas.width + bounds * 2 || o.y > canvas.height + bounds * 2;

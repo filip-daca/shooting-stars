@@ -1,11 +1,22 @@
 var Background = {
 	
+	Config: {
+		COLOR: "#666666",
+		SIZE: 4,
+		SPEED: 0.7,
+		DEPTH_SPEED_FACTOR: 3,
+	},
+		
 	timeToStar: 2,
 	nextStar: 0,
-	starBelt: [],
+	allStars: [],
 	
 	tick: function(event) {
-		//handle new stars
+		Background.tickNewStars();
+		Background.tickAllStars();
+	},
+	
+	tickNewStars: function() {
 		if (Background.nextStar <= 0) {
 			Background.timeToStar -= 2;
 			Background.addStar();
@@ -13,57 +24,60 @@ var Background = {
 		} else {
 			Background.nextStar--;
 		}
-		
-		//handle stars
-		for (star in Background.starBelt) {
-			var o = Background.starBelt[star];
+	},
+	
+	tickAllStars: function() {
+		for (star in Background.allStars) {
+			var o = Background.allStars[star];
 			if (!o || !o.active) {
 				continue;
 			}
 			
 			//handle stars movement and looping
 			if (Engine.outOfBounds(o, o.bounds)) {
-				stage.removeChild(o);
-				o.active = false;
+				Engine.remove(o);
 			}
 			
 			//move by velocity
 			o.x -= o.v;
 		}
 	},
-	
+		
 	addStar: function() {
 		var i = 0;
-		var len = Background.starBelt.length;
+		var len = Background.allStars.length;
 
-		//pooling approach
+		// pooling approach
 		while (i <= len) {
-			if (!Background.starBelt[i]) {
-				Background.starBelt[i] = new createjs.Shape();
+			if (!Background.allStars[i]) {
+				Background.allStars[i] = new createjs.Shape();
 				break;
-			} else if (!Background.starBelt[i].active) {
-				Background.starBelt[i].active = true;
+			} else if (!Background.allStars[i].active) {
+				Background.allStars[i].active = true;
 				break;
 			} else {
 				i++;
 			}
 		}
-
+		
 		if (len == 0) {
-			Background.starBelt[0] = new createjs.Shape();
+			Background.allStars[0] = new createjs.Shape();
 		}
 
-		stage.addChild(Background.starBelt[i]);
+		stage.addChild(Background.allStars[i]);
 		
-		var o = Background.starBelt[i];
-		var size = Math.random() * 4;
+		var o = Background.allStars[i];
+		var size = Math.random() * Background.Config.SIZE;
 		o.x = canvas.width;
 		o.y = canvas.height * Math.random();
-		o.v = 5 * Math.random() + size*10;
+		o.v = Background.Config.SPEED * Math.random() + size * Background.Config.DEPTH_SPEED_FACTOR;
 		o.active = true;
 
-		//draw smoke particle
-		o.graphics.beginStroke("#666666").beginFill("#666666").drawCircle(0,0,size);
+		// draw star
+		o.graphics
+			.beginStroke(Background.Config.COLOR)
+			.beginFill(Background.Config.COLOR)
+			.drawCircle(0,0,size);
 		
 		o.cache(-size-1,-size-1,size*2+2,size*2+2);
 	},

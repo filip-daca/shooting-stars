@@ -4,10 +4,10 @@
 var ExhaustParticles = {
 		
 	Config: {
-		SMOKE_ENTROPY: 20,		//how much energy a bullet has before it runs out.
-		SMOKE_TIME: 1,			//ticks between bullets
-		SMOKE_SPEED: 15,		//how fast the bullets move
-		SMOKE_THRUST: 0.8,		//how fast the bullets move
+		SMOKE_ENTROPY: 40,		//how much energy a bullet has before it runs out.
+		SMOKE_TIME: 60,			//ticks between bullets
+		SMOKE_SPEED: 13,		//how fast the bullets move
+		SMOKE_THRUST: 0.9,		//how fast the bullets move
 	},
 		
 	allParticles: [],
@@ -40,8 +40,7 @@ var ExhaustParticles = {
 			o.vY *= ExhaustParticles.Config.SMOKE_THRUST;
 			
 			if (--o.entropy <= 0) {
-				stage.removeChild(o);
-				o.active = false;
+				Engine.remove(o);
 			}
 		}
 	},

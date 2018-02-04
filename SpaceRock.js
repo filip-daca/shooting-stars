@@ -56,10 +56,9 @@
 
 			this.hit = (this.hit + radius) / 2;					//running average
 		}
+		this.graphics.closePath(); // draw the last line segment back to the start point.
 		
 		this.cache(-this.bounds,-this.bounds,2*this.bounds,2*this.bounds,2);
-
-		this.graphics.closePath(); // draw the last line segment back to the start point.
 		this.hit *= 1.1; //pad a bit
 	}
 
@@ -69,8 +68,8 @@
 
 		//pick a random direction to move in and base the rotation off of speed
 		var angle = Math.random() * (Math.PI * 2);
-		this.vX = Math.sin(angle) * (5 - size / 15);
-		this.vY = Math.cos(angle) * (5 - size / 15);
+		this.vX = Math.sin(angle) * (2 - size / 15);
+		this.vY = Math.cos(angle) * (2 - size / 15);
 		this.spin = (Math.random() + 0.2 ) * this.vX;
 
 		//associate score with size

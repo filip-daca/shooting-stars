@@ -4,9 +4,9 @@
 var Weapons = {
 		
 	Config: {
-		BULLET_TIME: 5,
+		BULLET_TIME: 20,
 		BULLET_ENTROPY: 100,
-		BULLET_SPEED: 17,
+		BULLET_SPEED: 9,
 	},
 		
 	bulletStream: [],
@@ -28,8 +28,7 @@ var Weapons = {
 			o.y += Math.cos(o.rotation * (Math.PI / -180)) * Weapons.Config.BULLET_SPEED;
 
 			if (--o.entropy <= 0) {
-				stage.removeChild(o);
-				o.active = false;
+				Engine.remove(o);
 			}
 		}
 	},
