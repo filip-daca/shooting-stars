@@ -51,6 +51,7 @@
 		g.lineTo(-5, -6);	//lfin
 		g.closePath(); 		// nose
 
+		this.shipBody.cache(-10,-10,2*10,2*10,2);
 
 		//draw ship flame
 		var o = this.shipFlame;
@@ -73,6 +74,8 @@
 		//furthest visual element
 		this.bounds = 10;
 		this.hit = this.bounds;
+		
+		this.shipFlame.cache(-5,-5,2*5,2*5,2);
 	}
 
 	p.tick = function (event) {

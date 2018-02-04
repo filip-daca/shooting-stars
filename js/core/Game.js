@@ -1,3 +1,5 @@
+var DEBUG = true;
+
 var DIFFICULTY = 2;			//how fast the game gets more difficult
 var SUB_ROCK_COUNT = 4;		//how many small rocks to make on rock death
 

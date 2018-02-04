@@ -9,8 +9,8 @@ var Engine = {
 	
 	remove: function(o) {
 		o.graphics.clear();
-		stage.removeChild(o);
 		o.active = false;
+		stage.removeChild(o);
 	},
 	
 	outOfBounds: function(o, bounds) {

@@ -1,10 +1,6 @@
 var Background = {
 	
 	Config: {
-		COLOR: "#666666",
-		SIZE: 4,
-		SPEED: 0.7,
-		DEPTH_SPEED_FACTOR: 3,
 	},
 		
 	timeToStar: 2,
@@ -13,7 +9,7 @@ var Background = {
 	
 	tick: function(event) {
 		Background.tickNewStars();
-		Background.tickAllStars();
+		Background.tickAllStars(event);
 	},
 	
 	tickNewStars: function() {
@@ -26,59 +22,40 @@ var Background = {
 		}
 	},
 	
-	tickAllStars: function() {
+	tickAllStars: function(event) {
 		for (star in Background.allStars) {
 			var o = Background.allStars[star];
 			if (!o || !o.active) {
 				continue;
 			}
-			
-			//handle stars movement and looping
-			if (Engine.outOfBounds(o, o.bounds)) {
-				Engine.remove(o);
-			}
-			
-			//move by velocity
-			o.x -= o.v;
+			o.tick(event)
 		}
 	},
 		
 	addStar: function() {
 		var i = 0;
 		var len = Background.allStars.length;
+		var newStar;
 
 		// pooling approach
 		while (i <= len) {
 			if (!Background.allStars[i]) {
-				Background.allStars[i] = new createjs.Shape();
+				Background.allStars[i] = new BackgroundStar();
+				newStar = Background.allStars[i];
 				break;
 			} else if (!Background.allStars[i].active) {
-				Background.allStars[i].active = true;
+				newStar = Background.allStars[i];
 				break;
 			} else {
 				i++;
 			}
 		}
 		
-		if (len == 0) {
-			Background.allStars[0] = new createjs.Shape();
+		if (DEBUG) {
+			$("#background-star-count").text(len);
 		}
 
-		stage.addChild(Background.allStars[i]);
-		
-		var o = Background.allStars[i];
-		var size = Math.random() * Background.Config.SIZE;
-		o.x = canvas.width;
-		o.y = canvas.height * Math.random();
-		o.v = Background.Config.SPEED * Math.random() + size * Background.Config.DEPTH_SPEED_FACTOR;
-		o.active = true;
-
-		// draw star
-		o.graphics
-			.beginStroke(Background.Config.COLOR)
-			.beginFill(Background.Config.COLOR)
-			.drawCircle(0,0,size);
-		
-		o.cache(-size-1,-size-1,size*2+2,size*2+2);
+		stage.addChild(newStar);
+		newStar.activate();
 	},
 };
