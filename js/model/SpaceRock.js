@@ -142,7 +142,7 @@
 	}
 	
 	p.explode = function() {
-		var i = 100;
+		var i = 50;
 		while (i > 0) {
 			//create smoke particle
 			var o = ExhaustParticles.allParticles[ExhaustParticles.getSmokeParticle()];
