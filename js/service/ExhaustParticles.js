@@ -25,48 +25,34 @@ var ExhaustParticles = {
 			if (!o || !o.active) {
 				continue;
 			}
-			
-			//handle spaceRock movement and looping
-			if (Engine.outOfBounds(o, o.bounds)) {
-				Engine.placeInBounds(o, o.bounds);
-			}
-			
-			//move by velocity
-			o.x += o.vX;
-			o.y += o.vY;
-			
-			//accelerate
-			o.vX *= ExhaustParticles.Config.SMOKE_THRUST;
-			o.vY *= ExhaustParticles.Config.SMOKE_THRUST;
-			
-			if (--o.entropy <= 0) {
-				Engine.remove(o);
-			}
+			o.tick();
 		}
 	},
 	
-	getSmokeParticle: function() {
+	addParticle: function(x, y, rotation) {	
 		var i = 0;
 		var len = ExhaustParticles.allParticles.length;
+		var newParticle;
 
-		//pooling approach
+		// pooling approach
 		while (i <= len) {
 			if (!ExhaustParticles.allParticles[i]) {
-				ExhaustParticles.allParticles[i] = new createjs.Shape();
+				ExhaustParticles.allParticles[i] = new ExhaustParticle();
+				newParticle = ExhaustParticles.allParticles[i];
 				break;
 			} else if (!ExhaustParticles.allParticles[i].active) {
-				ExhaustParticles.allParticles[i].active = true;
+				newParticle = ExhaustParticles.allParticles[i];
 				break;
 			} else {
 				i++;
 			}
 		}
-
-		if (len == 0) {
-			ExhaustParticles.allParticles[0] = new createjs.Shape();
+		
+		if (DEBUG) {
+			$("#exhaust-particle-count").text(len);
 		}
 
-		stage.addChild(ExhaustParticles.allParticles[i]);
-		return i;
+		stage.addChild(newParticle);
+		newParticle.activate(x, y, rotation);
 	},
 };

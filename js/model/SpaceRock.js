@@ -15,21 +15,21 @@
 
 // public properties:
 
-	p.bounds;	//visual radial size
-	p.hit;		//average radial disparity
-	p.size;		//size value itself
-	p.spin;		//spin ammount
-	p.score;	//score value
+	p.bounds;	// visual radial size
+	p.hit;		// average radial disparity
+	p.size;		// size value itself
+	p.spin;		// spin amount
+	p.score;	// score value
 
-	p.vX;		//velocity X
-	p.vY;		//velocity Y
+	p.vX;		// velocity X
+	p.vY;		// velocity Y
 
-	p.active;	//is it active
+	p.active;	// is it active
 	
 
 // public methods:
 
-	//handle drawing a spaceRock
+	// handle drawing a spaceRock
 	p.getShape = function (size) {
 		var angle = 0;
 		var radius = size;
@@ -38,12 +38,12 @@
 		this.hit = size;
 		this.bounds = 0;
 
-		//setup
+		// setup
 		this.graphics.clear();
 		this.graphics.beginStroke("#FFFFFF");
 		this.graphics.moveTo(0, size);
 
-		//draw spaceRock
+		// draw spaceRock
 		while (angle < (Math.PI * 2 - .5)) {
 			angle += .25 + (Math.random() * 100) / 500;
 			radius = size + (size / 2 * Math.random());
@@ -52,7 +52,7 @@
 			//track visual depiction for interaction
 			if (radius > this.bounds) {
 				this.bounds = radius;
-			}	//furthest point
+			}	// furthest point
 
 			this.hit = (this.hit + radius) / 2;					//running average
 		}
@@ -62,52 +62,52 @@
 		this.hit *= 1.1; //pad a bit
 	}
 
-	//handle reinit for poolings sake
+	// handle reinit for poolings sake
 	p.activate = function (size) {
 		this.getShape(size);
 
-		//pick a random direction to move in and base the rotation off of speed
+		// pick a random direction to move in and base the rotation off of speed
 		var angle = Math.random() * (Math.PI * 2);
 		this.vX = Math.sin(angle) * (2 - size / 15);
 		this.vY = Math.cos(angle) * (2 - size / 15);
 		this.spin = (Math.random() + 0.2 ) * this.vX;
 
-		//associate score with size
+		// associate score with size
 		this.score = (5 - size / 10) * 100;
 		this.active = true;
 	}
 
-	//handle what a spaceRock does to itself every frame
+	// handle what a spaceRock does to itself every frame
 	p.tick = function (event) {
 		this.rotation += this.spin;
 		this.x += this.vX;
 		this.y += this.vY;
 	}
 
-	//position the spaceRock so it floats on screen
+	// position the spaceRock so it floats on screen
 	p.floatOnScreen = function (width, height) {
-		//base bias on real estate and pick a side or top/bottom
+		// base bias on real estate and pick a side or top/bottom
 		if (Math.random() * (width + height) > width) {
-			//side; ensure velocity pushes it on screen
+			// side; ensure velocity pushes it on screen
 			if (this.vX > 0) {
 				this.x = -2 * this.bounds;
 			} else {
 				this.x = 2 * this.bounds + width;
 			}
-			//randomly position along other dimension
+			// randomly position along other dimension
 			if (this.vY > 0) {
 				this.y = Math.random() * height * 0.5;
 			} else {
 				this.y = Math.random() * height * 0.5 + 0.5 * height;
 			}
 		} else {
-			//top/bottom; ensure velocity pushes it on screen
+			// top/bottom; ensure velocity pushes it on screen
 			if (this.vY > 0) {
 				this.y = -2 * this.bounds;
 			} else {
 				this.y = 2 * this.bounds + height;
 			}
-			//randomly position along other dimension
+			// randomly position along other dimension
 			if (this.vX > 0) {
 				this.x = Math.random() * width * 0.5;
 			} else {
@@ -121,7 +121,7 @@
 	}
 
 	p.hitRadius = function (tX, tY, tHit) {
-		//early returns speed it up
+		// early returns speed it up
 		if (tX - tHit > this.x + this.hit) {
 			return;
 		}
@@ -137,28 +137,12 @@
 			return;
 		}
 
-		//now do the circle distance test
+		// now do the circle distance test
 		return this.hit + tHit > Math.sqrt(Math.pow(Math.abs(this.x - tX), 2) + Math.pow(Math.abs(this.y - tY), 2));
 	}
 	
 	p.explode = function() {
-		var i = 50;
-		while (i > 0) {
-			//create smoke particle
-			var o = ExhaustParticles.allParticles[ExhaustParticles.getSmokeParticle()];
-			o.x = this.x;
-			o.y = this.y;
-			o.rotation = (Math.random() * 360);
-			o.entropy = ExhaustParticles.Config.SMOKE_ENTROPY * Math.random();
-			o.vX = -Math.sin(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED * Math.random();
-			o.vY = -Math.cos(o.rotation * (Math.PI / -180)) * ExhaustParticles.Config.SMOKE_SPEED * Math.random();
-			o.active = true;
-
-			//draw smoke particle
-			o.graphics.beginStroke("#888888").moveTo(-1, 0).lineTo(0, 0);
-			
-			i-=1;
-		}
+		ExplosionParticles.addExplosion(this.x, this.y);
 	}
 
 	window.SpaceRock = createjs.promote(SpaceRock, "Shape");

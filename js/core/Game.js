@@ -132,11 +132,13 @@ function restart() {
 }
 
 function tick(event) {
+	ship.tick(event);
 	SpaceRocks.tick(event);
 	Weapons.tick(event);
-	ship.tick(event);
 	Background.tick(event);
 	ExhaustParticles.tick(event);
+	ExplosionParticles.tick(event);
+	
 	stage.update(event);
 }
 
