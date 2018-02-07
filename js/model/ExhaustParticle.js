@@ -15,6 +15,7 @@
 	
 	p.size;
 	p.bounds;
+	p.active;
 	
 	p.activate = function(x, y, rotation) {
 		this.size = ExhaustParticle.SIZE;

@@ -4,12 +4,12 @@
 var SpaceRocks = {
 	
 	Config: {
-		ROCK_TIME: 220,							//approximate tick count until a new asteroid gets introduced
+		ROCK_TIME: 220,
 	},
 		
 	allRocks: [],
-	timeToRock: undefined,						//difficulty adjusted version of ROCK_TIME
-	nextRock: undefined,						//ticks left until a new space rock arrives
+	timeToRock: undefined,
+	nextRock: undefined,
 	
 	init: function() {
 		SpaceRocks.allRocks = [];
@@ -21,8 +21,8 @@ var SpaceRocks = {
 		if (SpaceRocks.nextRock <= 0) {
 			if (alive) {
 				SpaceRocks.timeToRock -= DIFFICULTY;	//reduce spaceRock spacing slowly to increase difficulty with time
-				var index = SpaceRocks.getSpaceRock(SpaceRock.LRG_ROCK);
-				SpaceRocks.allRocks[index].floatOnScreen(canvas.width, canvas.height);
+				var newSpaceRock = SpaceRocks.createNewSpaceRock(SpaceRock.LRG_ROCK);
+				newSpaceRock.floatOnScreen(canvas.width, canvas.height);
 				SpaceRocks.nextRock = SpaceRocks.timeToRock + SpaceRocks.timeToRock * Math.random();
 			}
 		} else {
@@ -58,10 +58,7 @@ var SpaceRocks = {
 
 				if (o.hitPoint(p.x, p.y)) {
 					SpaceRocks.breakRock(o);
-
-					// remove
-					stage.removeChild(p);
-					Weapons.bulletStream[bullet].active = false;
+					Engine.remove(p);
 				}
 			}
 		}
@@ -72,29 +69,32 @@ var SpaceRocks = {
 		SpaceRocks.tickAllRocks(event);
 	},
 	
-	getSpaceRock: function(size) {
+	createNewSpaceRock: function(size) {
 		var i = 0;
 		var len = SpaceRocks.allRocks.length;
-
+		var newSpaceRock;
+		
 		//pooling approach
 		while (i <= len) {
 			if (!SpaceRocks.allRocks[i]) {
 				SpaceRocks.allRocks[i] = new SpaceRock(size);
+				newSpaceRock = SpaceRocks.allRocks[i];
 				break;
 			} else if (!SpaceRocks.allRocks[i].active) {
-				SpaceRocks.allRocks[i].activate(size);
+				newSpaceRock = SpaceRocks.allRocks[i];
 				break;
 			} else {
 				i++;
 			}
 		}
-
-		if (len == 0) {
-			SpaceRocks.allRocks[0] = new SpaceRock(size);
+		
+		if (DEBUG) {
+			$("#space-rock-count").text(len);
 		}
 
-		stage.addChild(SpaceRocks.allRocks[i]);
-		return i;
+		stage.addChild(newSpaceRock);
+		newSpaceRock.activate(size);
+		return newSpaceRock;
 	},
 	
 	breakRock: function(o) {
@@ -123,10 +123,10 @@ var SpaceRocks = {
 			var offSet;
 
 			for (i = 0; i < SUB_ROCK_COUNT; i++) {
-				index = SpaceRocks.getSpaceRock(newSize);
+				var newSpaceRock = SpaceRocks.createNewSpaceRock(newSize);
 				offSet = (Math.random() * o.size * 2) - o.size;
-				SpaceRocks.allRocks[index].x = o.x + offSet;
-				SpaceRocks.allRocks[index].y = o.y + offSet;
+				newSpaceRock.x = o.x + offSet;
+				newSpaceRock.y = o.y + offSet;
 			}
 		}
 		
@@ -137,6 +137,5 @@ var SpaceRocks = {
 
 		//remove
 		Engine.remove(o);
-		SpaceRocks.allRocks[spaceRock].active = false;
 	},
 };

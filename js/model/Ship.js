@@ -17,7 +17,6 @@
 	}
 	var p = createjs.extend(Ship, createjs.Container);
 
-// public properties:
 	Ship.COLOR = "#FFFFFF";
 	Ship.TURN_FACTOR = 4;
 	Ship.TOGGLE = 60;
@@ -25,21 +24,15 @@
 	Ship.MAX_VELOCITY = 5;
 	Ship.PUSH_AMMOUNT = 0.3;
 
-// public properties:
 	p.shipFlame;
 	p.shipBody;
-
 	p.timeout;
 	p.thrust;
-
 	p.vX;
 	p.vY;
-
 	p.bounds;
 	p.hit;
 	
-
-// public methods:
 	p.makeShape = function () {
 		this.makeBody();
 		this.makeFlame();

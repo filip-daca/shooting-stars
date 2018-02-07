@@ -13,6 +13,7 @@
 	
 	p.size;
 	p.bounds;
+	p.active;
 	
 	p.activate = function() {
 		this.size = Math.random() * BackgroundStar.MAX_SIZE;

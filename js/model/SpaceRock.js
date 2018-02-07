@@ -1,33 +1,24 @@
 (function (window) {
 
 	function SpaceRock(size) {
-		this.Shape_constructor(); // super call
-
+		this.Shape_constructor();
 		this.activate(size);
 	}
 
 	var p = createjs.extend(SpaceRock, createjs.Shape);
 
-// static properties:
 	SpaceRock.LRG_ROCK = 40;
 	SpaceRock.MED_ROCK = 20;
 	SpaceRock.SML_ROCK = 10;
 
-// public properties:
-
-	p.bounds;	// visual radial size
-	p.hit;		// average radial disparity
-	p.size;		// size value itself
-	p.spin;		// spin amount
-	p.score;	// score value
-
-	p.vX;		// velocity X
-	p.vY;		// velocity Y
-
-	p.active;	// is it active
-	
-
-// public methods:
+	p.bounds;
+	p.hit;
+	p.size;
+	p.spin;
+	p.score;
+	p.vX;
+	p.vY;
+	p.active;
 
 	// handle drawing a spaceRock
 	p.getShape = function (size) {
@@ -49,7 +40,7 @@
 			radius = size + (size / 2 * Math.random());
 			this.graphics.lineTo(Math.sin(angle) * radius, Math.cos(angle) * radius);
 
-			//track visual depiction for interaction
+			// track visual depiction for interaction
 			if (radius > this.bounds) {
 				this.bounds = radius;
 			}	// furthest point
@@ -58,7 +49,7 @@
 		}
 		this.graphics.closePath(); // draw the last line segment back to the start point.
 		
-		this.cache(-this.bounds,-this.bounds,2*this.bounds,2*this.bounds,2);
+		this.cache(-this.bounds, -this.bounds, 2 * this.bounds, 2 * this.bounds, 2);
 		this.hit *= 1.1; //pad a bit
 	}
 

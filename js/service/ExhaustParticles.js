@@ -4,10 +4,10 @@
 var ExhaustParticles = {
 		
 	Config: {
-		SMOKE_ENTROPY: 40,		//how much energy a bullet has before it runs out.
-		SMOKE_TIME: 60,			//ticks between bullets
-		SMOKE_SPEED: 10,		//how fast the bullets move
-		SMOKE_THRUST: 0.92,		//how fast the bullets move
+		SMOKE_ENTROPY: 40,
+		SMOKE_TIME: 60,
+		SMOKE_SPEED: 10,
+		SMOKE_THRUST: 0.92,
 	},
 		
 	allParticles: [],

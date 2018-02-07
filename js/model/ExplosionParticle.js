@@ -11,8 +11,15 @@
 	ExplosionParticle.TIME = 60;
 	ExplosionParticle.SPEED = 10;
 	ExplosionParticle.THRUST = 0.92;
+	ExplosionParticle.SIZE = 1;
+	
+	p.size;
+	p.bounds;
+	p.active;
 	
 	p.activate = function(x, y) {
+		this.size = ExplosionParticle.SIZE;
+		this.bounds = this.size;
 		this.x = x;
 		this.y = y;
 		this.rotation = (Math.random() * 360);
