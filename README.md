@@ -1,5 +1,9 @@
 # shooting-stars
 
+An arcade space shooter game.
+
+Play: [http://filip-daca.vxm.pl/shooting-stars/]
+
 ## Version history
 
 ### 0.3
