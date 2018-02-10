@@ -14,6 +14,8 @@
 		this.thrust = 0;
 		this.vX = 0;
 		this.vY = 0;
+		
+		this.changeWeapon(0);
 	}
 	var p = createjs.extend(Ship, createjs.Container);
 
@@ -32,6 +34,7 @@
 	p.vY;
 	p.bounds;
 	p.hit;
+	p.weapon;
 	
 	p.makeShape = function () {
 		this.makeBody();
@@ -102,13 +105,13 @@
 		}
 		
 		// handle firing
-		if (Weapons.nextBullet <= 0) {
+		if (this.weapon.nextBullet <= 0) {
 			if (alive && Controller.State.shootHeld) {
-				Weapons.nextBullet = Weapons.Config.BULLET_TIME;
-				Weapons.fireShotgun(this);
+				this.weapon.nextBullet = this.weapon.bulletTime;
+				this.weapon.fire(this);
 			}
 		} else {
-			Weapons.nextBullet--;
+			this.weapon.nextBullet--;
 		}
 		
 		// handle ship looping
@@ -126,7 +129,7 @@
 		// handle thrust
 		if (alive && Controller.State.fwdHeld) {
 			this.accelerate();
-			ExhaustParticles.addParticle(this.x, this.y, this.rotation)
+			ExhaustParticles.addParticle(this.x, this.y, this.rotation);
 		}
 	};
 
@@ -144,6 +147,10 @@
 		// cap max speeds
 		this.vX = Math.min(Ship.MAX_VELOCITY, Math.max(-Ship.MAX_VELOCITY, this.vX));
 		this.vY = Math.min(Ship.MAX_VELOCITY, Math.max(-Ship.MAX_VELOCITY, this.vY));
+	};
+	
+	p.changeWeapon = function (weaponIndex) {
+		this.weapon = Weapons.allWeapons[weaponIndex];
 	};
 
 	window.Ship = createjs.promote(Ship, "Container");
