@@ -9,4 +9,6 @@ Play: [http://filip-daca.vxm.pl/shooting-stars/]
 ### 0.3
 - Fixed performance issues with leaking objects
 - More objective and scallable code
+- JavaScript Module pattern
 - Debug mode
+- Introducing weapons: minigun, shotgun, chaingun
