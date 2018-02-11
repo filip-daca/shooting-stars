@@ -1,4 +1,5 @@
-(function (window) {
+/* exported ExplosionParticle */
+var ExplosionParticle = (function (window) {
 	
 	function ExplosionParticle() {
 		this.Shape_constructor();		
@@ -39,7 +40,7 @@
 			.lineTo(0, 0);
 	};
 	
-	p.tick = function(event) {
+	p.tick = function() {
 		if (Engine.outOfBounds(this, this.bounds)) {
 			Engine.placeInBounds(this, this.bounds);
 		}
@@ -61,4 +62,5 @@
 	
 	window.ExplosionParticle = createjs.promote(ExplosionParticle, "Shape");
 	
+	return ExplosionParticle;
 }(window));

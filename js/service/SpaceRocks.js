@@ -1,129 +1,94 @@
-/**
- * 
- */
-var SpaceRocks = {
+/* exported SpaceRocks */
+var SpaceRocks = (function() {
 	
-	Config: {
+	var config = {
 		ROCK_TIME: 220,
-	},
+		SUB_ROCK_COUNT: 4,
+	};
 		
-	allRocks: [],
-	timeToRock: undefined,
-	nextRock: undefined,
-	
-	init: function() {
-		SpaceRocks.allRocks = [];
-		SpaceRocks.timeToRock = SpaceRocks.Config.ROCK_TIME;
-		SpaceRocks.nextRock = 0;
-	},
-	
-	tickNewRocks: function(event) {
-		if (SpaceRocks.nextRock <= 0) {
-			if (alive) {
-				SpaceRocks.timeToRock -= DIFFICULTY;	//reduce spaceRock spacing slowly to increase difficulty with time
-				var newSpaceRock = SpaceRocks.createNewSpaceRock(SpaceRock.LRG_ROCK);
-				newSpaceRock.floatOnScreen(canvas.width, canvas.height);
-				SpaceRocks.nextRock = SpaceRocks.timeToRock + SpaceRocks.timeToRock * Math.random();
+	var allRocks = new Set();
+	var timeToRock;
+	var nextRock;
+	var c;
+	var s;
+
+	function tickNewRocks() {
+		if (nextRock <= 0) {
+			if (Player.isAlive()) {
+				timeToRock -= Game.getDifficulty();
+				var newSpaceRock = createNewSpaceRock(SpaceRock.LRG_ROCK);
+				newSpaceRock.floatOnScreen(c.width, c.height);
+				nextRock = timeToRock + timeToRock * Math.random();
 			}
 		} else {
-			SpaceRocks.nextRock--;
+			nextRock--;
 		}
-	},
+	}
 	
-	tickAllRocks: function(event) {
-		for (spaceRock in SpaceRocks.allRocks) {
-			var o = SpaceRocks.allRocks[spaceRock];
-			if (!o || !o.active) {
-				continue;
-			}
+	function tickAllRocks(event) {
+		for (const spaceRock of allRocks) {
+			if (spaceRock.active) {
+				spaceRock.tick(event);
 
-			//handle spaceRock movement and looping
-			if (Engine.outOfBounds(o, o.bounds)) {
-				Engine.placeInBounds(o, o.bounds);
-			}
-			o.tick(event);
-
-			//handle spaceRock ship collisions
-			if (alive && o.hitRadius(ship.x, ship.y, ship.hit)) {
-				SpaceRocks.breakRock(o);
-				continue;
-			}
-			
-			//handle spaceRock bullet collisions
-			for (bullet in Weapons.bulletStream) {
-				var p = Weapons.bulletStream[bullet];
-				if (!p || !p.active) {
+				// handle spaceRock ship collisions
+				if (Player.isAlive() && spaceRock.hitRadius(Player.getShip().x, Player.getShip().y, Player.getShip().hit)) {
+					breakRock(spaceRock);
 					continue;
 				}
-
-				if (o.hitPoint(p.x, p.y)) {
-					SpaceRocks.breakRock(o);
-					Engine.remove(p);
+				
+				// handle spaceRock bullet collisions
+				for (const bullet of Bullets.getAllBullets()) {
+					if (bullet.active) {
+						if (spaceRock.hitPoint(bullet.x, bullet.y)) {
+							breakRock(spaceRock);
+							Engine.remove(bullet);
+						}
+					}
 				}
-			}
-		}
-	},
-		
-	tick: function(event) {
-		SpaceRocks.tickNewRocks(event);
-		SpaceRocks.tickAllRocks(event);
-	},
-	
-	createNewSpaceRock: function(size) {
-		var i = 0;
-		var len = SpaceRocks.allRocks.length;
-		var newSpaceRock;
-		
-		//pooling approach
-		while (i <= len) {
-			if (!SpaceRocks.allRocks[i]) {
-				SpaceRocks.allRocks[i] = new SpaceRock(size);
-				newSpaceRock = SpaceRocks.allRocks[i];
-				break;
-			} else if (!SpaceRocks.allRocks[i].active) {
-				newSpaceRock = SpaceRocks.allRocks[i];
-				break;
 			} else {
-				i++;
+				allRocks.delete(spaceRock);
 			}
 		}
+	}
 		
-		if (DEBUG) {
-			$("#space-rock-count").text(len);
-		}
-
-		stage.addChild(newSpaceRock);
-		newSpaceRock.activate(size);
-		return newSpaceRock;
-	},
+	function createNewSpaceRock(size) {
+		var newSpaceRock = new SpaceRock(size);
 	
-	breakRock: function(o) {
+		allRocks.add(newSpaceRock);
+		s.addChild(newSpaceRock);
+		newSpaceRock.activate(size);
+
+		Core.debug("#space-rock-count", allRocks.size);
+
+		return newSpaceRock;
+	}
+	
+	function breakRock(o) {
 		var newSize;
 		switch (o.size) {
-			case SpaceRock.LRG_ROCK:
-				newSize = SpaceRock.MED_ROCK;
-				break;
-			case SpaceRock.MED_ROCK:
-				newSize = SpaceRock.SML_ROCK;
-				break;
-			case SpaceRock.SML_ROCK:
-				newSize = 0;
-				break;
+		case SpaceRock.LRG_ROCK:
+			newSize = SpaceRock.MED_ROCK;
+			break;
+		case SpaceRock.MED_ROCK:
+			newSize = SpaceRock.SML_ROCK;
+			break;
+		case SpaceRock.SML_ROCK:
+			newSize = 0;
+			break;
 		}
 
-		//score
-		if (alive) {
-			addScore(o.score);
+		// score
+		if (Player.isAlive()) {
+			Hud.addScore(o.score);
 		}
 
-		//create more
+		// create more
 		if (newSize > 0) {
 			var i;
-			var index;
 			var offSet;
 
-			for (i = 0; i < SUB_ROCK_COUNT; i++) {
-				var newSpaceRock = SpaceRocks.createNewSpaceRock(newSize);
+			for (i = 0; i < config.SUB_ROCK_COUNT; i++) {
+				var newSpaceRock = createNewSpaceRock(newSize, o.x, o.y);
 				offSet = (Math.random() * o.size * 2) - o.size;
 				newSpaceRock.x = o.x + offSet;
 				newSpaceRock.y = o.y + offSet;
@@ -133,9 +98,28 @@ var SpaceRocks = {
 		o.explode();
 		
 		// play sound
-		createjs.Sound.play("break", {interrupt: createjs.Sound.INTERUPT_LATE, offset: 0.8, volume: Sound.VOLUME});
+		Sound.playEffect("break", {offset: 0.8});
 
 		//remove
 		Engine.remove(o);
-	},
-};
+	}
+
+	return {
+		init: function() {
+			c = Core.getCanvas();
+			s = Core.getStage();
+			SpaceRocks.reinit();
+		},
+
+		reinit: function() {
+			allRocks.clear();
+			timeToRock = config.ROCK_TIME;
+			nextRock = 0;
+		},
+
+		tick: function(event) {
+			tickNewRocks(event);
+			tickAllRocks(event);
+		},
+	};
+})();

@@ -1,4 +1,5 @@
-(function (window) {
+/* exported Ship */
+var Ship = (function (window) {
 
 	function Ship() {
 		this.Container_constructor();
@@ -78,7 +79,7 @@
 		this.shipFlame.cache(-5, -5, 2*5, 2*5, 2);
 	};
 
-	p.tick = function (event) {
+	p.tick = function () {
 		// move by velocity
 		this.x += this.vX;
 		this.y += this.vY;
@@ -106,7 +107,7 @@
 		
 		// handle firing
 		if (this.weapon.nextBullet <= 0) {
-			if (alive && Controller.State.shootHeld) {
+			if (Player.isAlive() && Controller.state.shootHeld) {
 				this.weapon.nextBullet = this.weapon.bulletTime;
 				this.weapon.fire(this);
 			}
@@ -115,19 +116,19 @@
 		}
 		
 		// handle ship looping
-		if (alive && Engine.outOfBounds(this, this.bounds)) {
+		if (Player.isAlive() && Engine.outOfBounds(this, this.bounds)) {
 			Engine.placeInBounds(this, this.bounds);
 		}
 		
 		// handle turning
-		if (alive && Controller.State.lfHeld) {
+		if (Player.isAlive() && Controller.state.lfHeld) {
 			this.rotation -= Ship.TURN_FACTOR;
-		} else if (alive && Controller.State.rtHeld) {
+		} else if (Player.isAlive() && Controller.state.rtHeld) {
 			this.rotation += Ship.TURN_FACTOR;
 		}
 
 		// handle thrust
-		if (alive && Controller.State.fwdHeld) {
+		if (Player.isAlive() && Controller.state.fwdHeld) {
 			this.accelerate();
 			ExhaustParticles.addParticle(this.x, this.y, this.rotation);
 		}
@@ -155,4 +156,5 @@
 
 	window.Ship = createjs.promote(Ship, "Container");
 
+	return Ship;
 }(window));

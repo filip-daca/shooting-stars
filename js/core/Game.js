@@ -1,160 +1,100 @@
-var DEBUG = true;
+/* exported Game */
+var Game = (function() {
 
-var DIFFICULTY = 2;			//how fast the game gets more difficult
-var SUB_ROCK_COUNT = 4;		//how many small rocks to make on rock death
+	var difficulty = 2;
+	var stage;
 
-var manifest;           // used to register sounds for preloading
-var preload;
-
-var canvas;			//Main canvas
-var stage;			//Main display stage
-
-var ship;			//the actual ship
-var alive;			//wheter the player is alive
-
-var messageField;		//Message display field
-var scoreField;			//score Field
-
-var loadingInterval = 0;
-
-//register key functions
-document.onkeydown = Controller.handleKeyDown;
-document.onkeyup = Controller.handleKeyUp;
-
-function init() {
-	if (!createjs.Sound.initializeDefaultPlugins()) {
-		document.getElementById("error").style.display = "block";
-		document.getElementById("content").style.display = "none";
-		return;
+	function hasAnyInitErrors() {
+		if (!createjs.Sound.initializeDefaultPlugins()) {
+			document.getElementById("error").style.display = "block";
+			document.getElementById("content").style.display = "none";
+			return true;
+		}
+		if (createjs.BrowserDetect.isIOS || createjs.BrowserDetect.isAndroid || createjs.BrowserDetect.isBlackberry) {
+			document.getElementById("mobile").style.display = "block";
+			document.getElementById("content").style.display = "none";
+			return true;
+		}
+		return false;
 	}
 
-	if (createjs.BrowserDetect.isIOS || createjs.BrowserDetect.isAndroid || createjs.BrowserDetect.isBlackberry) {
-		document.getElementById("mobile").style.display = "block";
-		document.getElementById("content").style.display = "none";
-		return;
+	function tick(event) {
+		
+		Background.tick(event);
+		Bullets.tick(event);
+		ExhaustParticles.tick(event);
+		ExplosionParticles.tick(event);
+		Player.tick(event);
+		SpaceRocks.tick(event);
+
+		stage.update(event);
 	}
 
-	canvas = document.getElementById("gameCanvas");
-	stage = new createjs.Stage(canvas);
-	messageField = new createjs.Text("Loading", "bold 24px Arial", "#FFFFFF");
-	messageField.maxWidth = 1000;
-	messageField.textAlign = "center";
-	messageField.textBaseline = "middle";
-	messageField.x = canvas.width / 2;
-	messageField.y = canvas.height / 2;
-	stage.addChild(messageField);
-	stage.update(); 	//update the stage to show text
+	function initAllModules() {
+		Core.init();
 
-	// begin loading content (only sounds to load)
-	var assetsPath = "sounds/";
-	manifest = [
-		{id: "begin", src: "start_game.mp3"},
-		{id: "break", src: "explosion.wav", data: 6},
-		{id: "death", src: "death.ogg"},
-		{id: "laser", src: "laser.wav", data: 6},
-		{id: "music", src: "music.mp3"}
-	];
+		Controller.init();
+		Engine.init();
+		Hud.init();
+		Loader.init();
+		MainMenu.init();
+		Sound.init();
 
-	createjs.Sound.alternateExtensions = ["mp3", "wav"];
-	preload = new createjs.LoadQueue(true, assetsPath);
-	preload.installPlugin(createjs.Sound);
-	preload.addEventListener("complete", doneLoading); // add an event listener for when load is completed
-	preload.addEventListener("progress", updateLoading);
-	preload.loadManifest(manifest);
-	
-	$("#toggle-volume").bind("click", Sound.toggleVolume);
-}
-
-function stop() {
-	if (preload != null) {
-		preload.close();
+		Background.init();
+		Bullets.init();
+		ExhaustParticles.init();
+		ExplosionParticles.init();
+		Player.init();
+		SpaceRocks.init();
+		Weapons.init();
 	}
-	createjs.Sound.stop();
-}
 
-function updateLoading() {
-	messageField.text = "Loading " + (preload.progress * 100 | 0) + "%";
-	stage.update();
-}
+	return {
+		init: function() {
+			initAllModules();
+			if (hasAnyInitErrors()) {
+				return;
+			}
+			stage = Core.getStage();
+			MainMenu.loadGame();
+		},
 
-function doneLoading(event) {
-	clearInterval(loadingInterval);
-	scoreField = new createjs.Text("0", "bold 18px Arial", "#FFFFFF");
-	scoreField.textAlign = "right";
-	scoreField.x = canvas.width - 20;
-	scoreField.y = 20;
-	scoreField.maxWidth = 1000;
+		// reset all game logic
+		restart: function() {
+			// hide anything on stage and show the score
+			stage.removeAllChildren();
 
-	messageField.text = "LET'S GO EBIN ADVENTURE: Click to play";
+			Hud.create();
+			Hud.clearScore();
+			
+			Bullets.reinit();
+			ExhaustParticles.reinit();
+			ExplosionParticles.reinit();
+			SpaceRocks.reinit();
 
-	// start the music
-	Sound.startMusic();
-	
-	watchRestart();
-}
+			// create the player
+			Player.create();
 
-function watchRestart() {
-	//watch for clicks
-	stage.addChild(messageField);
-	stage.update(); 	//update the stage to show text
-	canvas.onclick = Controller.handleClick;
-}
+			// reset key presses
+			Controller.clearState();
 
-//reset all game logic
-function restart() {
-	//hide anything on stage and show the score
-	stage.removeAllChildren();
-	scoreField.text = (0).toString();
-	stage.addChild(scoreField);
+			// ensure stage is blank and add the ship
+			stage.clear();
+			stage.addChild(Player.getShip());
 
-	SpaceRocks.init();
-	Weapons.init();
-	ExhaustParticles.init();
+			// start game timer
+			createjs.Ticker.framerate = 60;
+			if (!createjs.Ticker.hasEventListener("tick")) {
+				createjs.Ticker.addEventListener("tick", tick);
+			}
+		},
 
-	//create the player
-	alive = true;
-	ship = new Ship();
-	ship.x = canvas.width / 2;
-	ship.y = canvas.height / 2;
+		getDifficulty: function() {
+			return difficulty;
+		},
+	};
+})();
 
-	//reset key presses
-	Controller.clearState();
-
-	//ensure stage is blank and add the ship
-	stage.clear();
-	stage.addChild(ship);
-
-	//start game timer
-	createjs.Ticker.framerate = 60;
-	if (!createjs.Ticker.hasEventListener("tick")) {
-		createjs.Ticker.addEventListener("tick", tick);
-	}
-}
-
-function tick(event) {
-	ship.tick(event);
-	SpaceRocks.tick(event);
-	Weapons.tick(event);
-	Background.tick(event);
-	ExhaustParticles.tick(event);
-	ExplosionParticles.tick(event);
-	
-	stage.update(event);
-}
-
-function playerDies() {
-	alive = false;
-
-	stage.removeChild(ship);
-	messageField.text = "You're dead:  Click or hit enter to play again";
-	stage.addChild(messageField);
-	watchRestart();
-
-	//play death sound
-	createjs.Sound.play("death", {interrupt: createjs.Sound.INTERRUPT_ANY, volume: Sound.VOLUME});
-}
-
-function addScore(value) {
-	//trust the field will have a number and add the score
-	scoreField.text = (Number(scoreField.text) + Number(value)).toString();
-}
+$(function() {
+	Game.init();
+});

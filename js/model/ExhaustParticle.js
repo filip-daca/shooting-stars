@@ -1,4 +1,5 @@
-(function (window) {
+/* exported ExhaustParticle */
+var ExhaustParticle = (function (window) {
 	
 	function ExhaustParticle() {
 		this.Shape_constructor();		
@@ -20,8 +21,8 @@
 	p.activate = function(x, y, rotation) {
 		this.size = ExhaustParticle.SIZE;
 		this.bounds = this.size;
-		this.x = x;
-		this.y = y;
+		this.x = x - Math.sin(rotation * (Math.PI / -180)) * 13;
+		this.y = y - Math.cos(rotation * (Math.PI / -180)) * 13;
 		this.rotation = rotation + (Math.random() * 12 - 6);
 		this.entropy = ExhaustParticle.ENTROPY;
 		this.vX = -Math.sin(this.rotation * (Math.PI / -180)) * ExhaustParticle.SPEED;
@@ -41,7 +42,7 @@
 		this.cache(-this.bounds*2, -this.bounds*2, this.bounds*4, this.bounds*4);
 	};
 	
-	p.tick = function(event) {
+	p.tick = function() {
 		if (Engine.outOfBounds(this, this.bounds)) {
 			Engine.placeInBounds(this, this.bounds);
 		}
@@ -63,4 +64,5 @@
 	
 	window.ExhaustParticle = createjs.promote(ExhaustParticle, "Shape");
 	
+	return ExhaustParticle;
 }(window));

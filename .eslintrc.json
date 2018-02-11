@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    },
+    "globals": {
+        "createjs": false,
+        "$": false,
+        
+        "Controller": false,
+        "Core": false,
+        "Engine": false,
+        "Game": false,
+        "Hud": false,
+        "Loader": false,
+        "MainMenu": false,
+        "Sound": false,
+        
+        "BackgroundStar": false,
+        "Bullet": false,
+        "ExhaustParticle": false,
+        "ExplosionParticle": false,
+        "Ship": false,
+        "SpaceRock": false,
+
+        "Background": false,
+        "Bullets": false,
+        "ExhaustParticles": false,
+        "ExplosionParticles": false,
+        "Player": false,
+        "SpaceRocks": false,
+        "Weapons": false
+    }
+}

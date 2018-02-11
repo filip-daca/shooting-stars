@@ -1,4 +1,5 @@
-(function (window) {
+/* exported BackgroundStar */
+var BackgroundStar = (function (window) {
 	
 	function BackgroundStar() {
 		this.Shape_constructor();		
@@ -18,8 +19,8 @@
 	p.activate = function() {
 		this.size = Math.random() * BackgroundStar.MAX_SIZE;
 		this.bounds = this.size;
-		this.x = canvas.width;
-		this.y = canvas.height * Math.random();
+		this.x = Core.getCanvas().width;
+		this.y = Core.getCanvas().height * Math.random();
 		this.v = BackgroundStar.MAX_SPEED * Math.random() + this.size * BackgroundStar.DEPTH_SPEED_FACTOR;
 		
 		this.getShape();
@@ -36,7 +37,7 @@
 		this.cache(-this.size, -this.size, this.size*2, this.size*2);
 	};
 	
-	p.tick = function(event) {
+	p.tick = function() {
 		if (Engine.outOfBounds(this, this.bounds)) {
 			Engine.remove(this);
 			return;
@@ -50,4 +51,5 @@
 	
 	window.BackgroundStar = createjs.promote(BackgroundStar, "Shape");
 	
+	return BackgroundStar;
 }(window));

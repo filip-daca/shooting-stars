@@ -1,58 +1,37 @@
-/**
- * 
- */
-var ExhaustParticles = {
+/* exported ExhaustParticles */
+var ExhaustParticles = (function() {
 		
-	Config: {
-		SMOKE_ENTROPY: 40,
-		SMOKE_TIME: 60,
-		SMOKE_SPEED: 10,
-		SMOKE_THRUST: 0.92,
-	},
-		
-	allParticles: [],
-	nextBullet: 0,
-	
-	init: function() {
-		ExhaustParticles.allParticles = [];
-		Weapons.nextBullet = 0;
-	},
-	
-	tick: function(event) {	
-		//handle smoke
-		for (particle in ExhaustParticles.allParticles) {
-			var o = ExhaustParticles.allParticles[particle];
-			if (!o || !o.active) {
-				continue;
-			}
-			o.tick();
-		}
-	},
-	
-	addParticle: function(x, y, rotation) {	
-		var i = 0;
-		var len = ExhaustParticles.allParticles.length;
-		var newParticle;
+	var s;
+	var allParticles = new Set();
 
-		// pooling approach
-		while (i <= len) {
-			if (!ExhaustParticles.allParticles[i]) {
-				ExhaustParticles.allParticles[i] = new ExhaustParticle();
-				newParticle = ExhaustParticles.allParticles[i];
-				break;
-			} else if (!ExhaustParticles.allParticles[i].active) {
-				newParticle = ExhaustParticles.allParticles[i];
-				break;
-			} else {
-				i++;
-			}
-		}
-		
-		if (DEBUG) {
-			$("#exhaust-particle-count").text(len);
-		}
+	return {
+		init: function() {
+			s = Core.getStage();
+			ExhaustParticles.reinit();
+		},
 
-		stage.addChild(newParticle);
-		newParticle.activate(x, y, rotation);
-	},
-};
+		reinit: function() {
+			allParticles.clear();
+		},
+
+		tick: function(event) {	
+			for (const particle of allParticles) {
+				if (particle.active) {
+					particle.tick(event);
+				} else {
+					allParticles.delete(particle);
+				}
+			}
+		},
+
+		addParticle: function(x, y, rotation) {	
+			var newParticle = new ExhaustParticle();
+	
+			allParticles.add(newParticle);
+			s.addChild(newParticle);
+			newParticle.activate(x, y, rotation);
+
+			Core.debug("#exhaust-particle-count", allParticles.size);
+		},
+	};
+})();

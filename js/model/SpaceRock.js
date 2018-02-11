@@ -45,13 +45,13 @@
 				this.bounds = radius;
 			}	// furthest point
 
-			this.hit = (this.hit + radius) / 2;					//running average
+			this.hit = (this.hit + radius) / 2; // running average
 		}
 		this.graphics.closePath(); // draw the last line segment back to the start point.
 		
 		this.cache(-this.bounds, -this.bounds, 2 * this.bounds, 2 * this.bounds, 2);
 		this.hit *= 1.1; //pad a bit
-	}
+	};
 
 	// handle reinit for poolings sake
 	p.activate = function (size) {
@@ -66,14 +66,22 @@
 		// associate score with size
 		this.score = (5 - size / 10) * 100;
 		this.active = true;
-	}
+	};
 
 	// handle what a spaceRock does to itself every frame
-	p.tick = function (event) {
+	p.tick = function () {
+		// handle spaceRock movement and looping
+		if (Engine.outOfBounds(this, this.bounds)) {
+			Engine.placeInBounds(this, this.bounds);
+		}
+		this.move();
+	};
+
+	p.move = function() {
 		this.rotation += this.spin;
 		this.x += this.vX;
 		this.y += this.vY;
-	}
+	};
 
 	// position the spaceRock so it floats on screen
 	p.floatOnScreen = function (width, height) {
@@ -105,11 +113,11 @@
 				this.x = Math.random() * width * 0.5 + 0.5 * width;
 			}
 		}
-	}
+	};
 
 	p.hitPoint = function (tX, tY) {
 		return this.hitRadius(tX, tY, 0);
-	}
+	};
 
 	p.hitRadius = function (tX, tY, tHit) {
 		// early returns speed it up
@@ -130,12 +138,13 @@
 
 		// now do the circle distance test
 		return this.hit + tHit > Math.sqrt(Math.pow(Math.abs(this.x - tX), 2) + Math.pow(Math.abs(this.y - tY), 2));
-	}
+	};
 	
 	p.explode = function() {
 		ExplosionParticles.addExplosion(this.x, this.y);
-	}
+	};
 
 	window.SpaceRock = createjs.promote(SpaceRock, "Shape");
 
+	return SpaceRock;
 }(window));

@@ -1,6 +1,9 @@
-var Controller = {
+/* exported Controller */
+var Controller = (function() {
 
-	Keys: {
+	var Keys = {
+		KEYCODE_1:		49,
+		KEYCODE_0:		58,
 		KEYCODE_ENTER: 	13,
 		KEYCODE_SPACE: 	32,
 		KEYCODE_UP: 	38,
@@ -9,82 +12,95 @@ var Controller = {
 		KEYCODE_W:	 	87,
 		KEYCODE_A: 		65,
 		KEYCODE_D: 		68,
-	},
+	};
 
-	State: {
-		shootHeld: false,
-		lfHeld: false,
-		rtHeld: false,
-		fwdHeld: false,
-	},
+	var confirmHandler;
 	
-	clearState: function() {
-		for (var s in Controller.State) {
-			Controller.State[s] = false;
+	function handleKeyDown(e) {
+		// cross browser issues exist
+		if (!e) {
+			e = window.event;
 		}
-	},
-	
-	handleKeyDown: function(e) {
+		
+		Core.debug("#key-code-pressed", e.keyCode);
+		
+		switch (e.keyCode) {
+		case Keys.KEYCODE_SPACE:
+			Controller.state.shootHeld = true;
+			return false;
+		case Keys.KEYCODE_A:
+		case Keys.KEYCODE_LEFT:
+			Controller.state.lfHeld = true;
+			return false;
+		case Keys.KEYCODE_D:
+		case Keys.KEYCODE_RIGHT:
+			Controller.state.rtHeld = true;
+			return false;
+		case Keys.KEYCODE_W:
+		case Keys.KEYCODE_UP:
+			Controller.state.fwdHeld = true;
+			return false;
+		case Keys.KEYCODE_ENTER:
+			handleConfirm();
+			return false;
+		}
+		
+		if (e.keyCode >= Keys.KEYCODE_1 && e.keyCode <= Keys.KEYCODE_0) {
+			Player.getShip().changeWeapon(e.keyCode - Keys.KEYCODE_1);
+		}
+	}
+
+	function handleKeyUp(e) {
 		//cross browser issues exist
 		if (!e) {
-			var e = window.event;
+			e = window.event;
 		}
 		switch (e.keyCode) {
-			case Controller.Keys.KEYCODE_SPACE:
-				Controller.State.shootHeld = true;
-				return false;
-			case Controller.Keys.KEYCODE_A:
-			case Controller.Keys.KEYCODE_LEFT:
-				Controller.State.lfHeld = true;
-				return false;
-			case Controller.Keys.KEYCODE_D:
-			case Controller.Keys.KEYCODE_RIGHT:
-				Controller.State.rtHeld = true;
-				return false;
-			case Controller.Keys.KEYCODE_W:
-			case Controller.Keys.KEYCODE_UP:
-				Controller.State.fwdHeld = true;
-				return false;
-			case Controller.Keys.KEYCODE_ENTER:
-				if (canvas.onclick == Controller.handleClick) {
-					Controller.handleClick();
-				}
-				return false;
+		case Keys.KEYCODE_SPACE:
+			Controller.state.shootHeld = false;
+			break;
+		case Keys.KEYCODE_A:
+		case Keys.KEYCODE_LEFT:
+			Controller.state.lfHeld = false;
+			break;
+		case Keys.KEYCODE_D:
+		case Keys.KEYCODE_RIGHT:
+			Controller.state.rtHeld = false;
+			break;
+		case Keys.KEYCODE_W:
+		case Keys.KEYCODE_UP:
+			Controller.state.fwdHeld = false;
+			break;
 		}
-	},
+	}
 
-	handleKeyUp: function(e) {
-		//cross browser issues exist
-		if (!e) {
-			var e = window.event;
+	function handleConfirm() {
+		if (typeof confirmHandler === "function") {
+			confirmHandler();
 		}
-		switch (e.keyCode) {
-			case Controller.Keys.KEYCODE_SPACE:
-				Controller.State.shootHeld = false;
-				break;
-			case Controller.Keys.KEYCODE_A:
-			case Controller.Keys.KEYCODE_LEFT:
-				Controller.State.lfHeld = false;
-				break;
-			case Controller.Keys.KEYCODE_D:
-			case Controller.Keys.KEYCODE_RIGHT:
-				Controller.State.rtHeld = false;
-				break;
-			case Controller.Keys.KEYCODE_W:
-			case Controller.Keys.KEYCODE_UP:
-				Controller.State.fwdHeld = false;
-				break;
-		}
-	},
+	}
 
-	handleClick: function() {
-		//prevent extra clicks and hide text
-		canvas.onclick = null;
-		stage.removeChild(messageField);
+	return {
+		init: function() {
+			document.onkeydown = handleKeyDown;
+			document.onkeyup = handleKeyUp;
+		},
 
-		// indicate the player is now on screen
-		createjs.Sound.play("begin", {volume: Sound.VOLUME});
+		state: {
+			shootHeld: false,
+			lfHeld: false,
+			rtHeld: false,
+			fwdHeld: false,
+		},
 
-		restart();
-	},
-};
+		clearState: function() {
+			for (var s in Controller.state) {
+				Controller.state[s] = false;
+			}
+		},
+
+		setConfirmHandle(callback) {
+			confirmHandler = callback;
+		},
+	};
+})();
