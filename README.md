@@ -2,9 +2,12 @@
 
 An arcade space shooter game.
 
-Play: [http://filip-daca.vxm.pl/shooting-stars/]
+Play: http://filip-daca.vxm.pl/shooting-stars/
 
 ## Version history
+
+### 0.4
+- Spawning and collecting gems
 
 ### 0.3
 - Fixed performance issues with leaking objects

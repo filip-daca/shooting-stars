@@ -1,4 +1,5 @@
-(function (window) {
+/* exported SpaceRock */
+var SpaceRock = (function (window) {
 
 	function SpaceRock(size) {
 		this.Shape_constructor();
@@ -7,15 +8,21 @@
 
 	var p = createjs.extend(SpaceRock, createjs.Shape);
 
+	SpaceRock.COLOR = "#FFFFFF";
+	SpaceRock.GEM_COLOR = "#00FF00";
 	SpaceRock.LRG_ROCK = 40;
 	SpaceRock.MED_ROCK = 20;
 	SpaceRock.SML_ROCK = 10;
+	SpaceRock.GLOW_INTERVAL = 20;
 
 	p.bounds;
 	p.hit;
 	p.size;
 	p.spin;
 	p.score;
+	p.hasGem;
+	p.gemGlow;
+	p.glowTimer;
 	p.vX;
 	p.vY;
 	p.active;
@@ -31,7 +38,7 @@
 
 		// setup
 		this.graphics.clear();
-		this.graphics.beginStroke("#FFFFFF");
+		this.graphics.beginStroke(SpaceRock.COLOR);
 		this.graphics.moveTo(0, size);
 
 		// draw spaceRock
@@ -63,6 +70,10 @@
 		this.vY = Math.cos(angle) * (2 - size / 15);
 		this.spin = (Math.random() + 0.2 ) * this.vX;
 
+		if (this.hasGem) {
+			this.glowTimer = SpaceRock.GLOW_INTERVAL;
+		}
+
 		// associate score with size
 		this.score = (5 - size / 10) * 100;
 		this.active = true;
@@ -75,12 +86,25 @@
 			Engine.placeInBounds(this, this.bounds);
 		}
 		this.move();
+
+		if (this.hasGem) {
+			this.glow();
+		}
 	};
 
 	p.move = function() {
 		this.rotation += this.spin;
 		this.x += this.vX;
 		this.y += this.vY;
+	};
+
+	p.glow = function() {
+		if (this.glowTimer == 0) {
+			this.gemGlow = new RoundGlow(this.x, this.y, this.size, SpaceRock.GEM_COLOR);
+			this.glowTimer = SpaceRock.GLOW_INTERVAL;
+		} else {
+			this.glowTimer--;
+		}
 	};
 
 	// position the spaceRock so it floats on screen

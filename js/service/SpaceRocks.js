@@ -9,6 +9,7 @@ var SpaceRocks = (function() {
 	var allRocks = new Set();
 	var timeToRock;
 	var nextRock;
+	var gemSpawned;
 	var c;
 	var s;
 
@@ -53,6 +54,10 @@ var SpaceRocks = (function() {
 		
 	function createNewSpaceRock(size) {
 		var newSpaceRock = new SpaceRock(size);
+		if (!gemSpawned) {
+			newSpaceRock.hasGem = true;
+			gemSpawned = true;
+		}
 	
 		allRocks.add(newSpaceRock);
 		s.addChild(newSpaceRock);
@@ -115,11 +120,16 @@ var SpaceRocks = (function() {
 			allRocks.clear();
 			timeToRock = config.ROCK_TIME;
 			nextRock = 0;
+			gemSpawned = false;
 		},
 
 		tick: function(event) {
 			tickNewRocks(event);
 			tickAllRocks(event);
+		},
+
+		setGemSpawned: function(value) {
+			gemSpawned = value;
 		},
 	};
 })();

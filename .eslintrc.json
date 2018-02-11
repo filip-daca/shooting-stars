@@ -39,6 +39,7 @@
         "Bullet": false,
         "ExhaustParticle": false,
         "ExplosionParticle": false,
+        "RoundGlow": false,
         "Ship": false,
         "SpaceRock": false,
 

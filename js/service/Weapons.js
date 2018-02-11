@@ -1,6 +1,6 @@
 var MiniGun = {
 
-	bulletSpeed: 9,
+	bulletSpeed: 11,
 	bulletSize: 3,
 	bulletColor: "#FF33FF",
 	bulletTime: 10,
