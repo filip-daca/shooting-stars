@@ -37,7 +37,7 @@ var MainMenu = (function() {
 		s.removeChild(messageField);
 
 		// indicate the player is now on screen
-		createjs.Sound.play("begin", {volume: Sound.VOLUME});
+		createjs.Sound.play("start", {volume: Sound.VOLUME});
 
 		Game.restart();
 	}

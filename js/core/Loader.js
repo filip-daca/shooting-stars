@@ -9,11 +9,13 @@ var Loader = (function() {
 		startPreload: function(doneCallback, updateCallback) {
 			var assetsPath = "sounds/";
 			var manifest = [
-				{id: "begin", src: "start_game.mp3"},
-				{id: "break", src: "explosion.wav", data: 6},
-				{id: "death", src: "death.ogg"},
-				{id: "laser", src: "laser.wav", data: 6},
-				{id: "music", src: "music.mp3"}
+				{id: "chaingun", src: "Chaingun.wav", data: 6},
+				{id: "explosion", src: "Explosion.wav", data: 6},
+				{id: "minigun", src: "Minigun.wav", data: 6},
+				{id: "music", src: "music.mp3"},
+				{id: "powerup", src: "Powerup.wav", data: 6},
+				{id: "shotgun", src: "Shotgun.wav", data: 6},
+				{id: "start", src: "Start.wav", data: 6},
 			];
 	
 			createjs.Sound.alternateExtensions = ["mp3", "wav"];

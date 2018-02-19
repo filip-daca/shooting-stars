@@ -11,7 +11,7 @@ var MiniGun = {
 		var bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
 		bullet.activate(ship.x, ship.y, ship.rotation);
 		Bullets.addBullet(bullet);
-		Sound.playEffect("laser");
+		Sound.playEffect("minigun");
 	}, 	
 };
 
@@ -33,7 +33,7 @@ var ShotGun = {
 			i--;
 		}
 
-		Sound.playEffect("laser");
+		Sound.playEffect("shotgun");
 	}, 	
 };
 
@@ -50,7 +50,7 @@ var ChainGun = {
 		var bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
 		bullet.activate(ship.x, ship.y, ship.rotation + (Math.random() * 12 - 6));
 		Bullets.addBullet(bullet);
-		Sound.playEffect("laser");
+		Sound.playEffect("chaingun");
 	}, 	
 };
 

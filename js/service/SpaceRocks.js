@@ -104,7 +104,7 @@ var SpaceRocks = (function() {
 		o.explode();
 		
 		// Play sound
-		Sound.playEffect("break", {offset: 0.8});
+		Sound.playEffect("explosion", {offset: 0.8});
 
 		// Remove
 		Engine.remove(o);

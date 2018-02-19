@@ -25,6 +25,7 @@ var Gems = (function() {
 					if (Player.isAlive() && Engine.hitsRadius(gem, Player.getShip())) {
 						gem.collect();
 						Engine.remove(gem);
+						Sound.playEffect("powerup", {offset: 0.8});
 						Player.changeRandomWeapon();
 					}
 				} else {
