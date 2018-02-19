@@ -4,6 +4,7 @@ var Hud = (function() {
 	var c;
 	var s;
 	var scoreField;
+	var gemScoreField;
 
 	function initScoreField() {
 		scoreField = new createjs.Text("0", "bold 18px Arial", "#FFFFFF");
@@ -14,6 +15,15 @@ var Hud = (function() {
 		s.addChild(scoreField);
 	}
 
+	function initGemScoreField() {
+		gemScoreField = new createjs.Text("0", "bold 42px Courier New", "#FFFFFF");
+		gemScoreField.textAlign = "center";
+		gemScoreField.x = c.width / 2;
+		gemScoreField.y = 20;
+		gemScoreField.maxWidth = 1000;
+		s.addChild(gemScoreField);
+	}
+
 	return {
 		init: function() {
 			c = Core.getCanvas();
@@ -22,6 +32,7 @@ var Hud = (function() {
 
 		create: function() {
 			initScoreField();
+			initGemScoreField();
 		},
 
 		clearScore: function() {
@@ -31,6 +42,10 @@ var Hud = (function() {
 
 		addScore: function(value) {
 			scoreField.text = (Number(scoreField.text) + Number(value)).toString();
+		},
+
+		addGemScore: function() {
+			gemScoreField.text = (Number(gemScoreField.text) + 1).toString();
 		}
 	};
 })();

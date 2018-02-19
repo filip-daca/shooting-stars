@@ -24,6 +24,7 @@ var Game = (function() {
 		Bullets.tick(event);
 		ExhaustParticles.tick(event);
 		ExplosionParticles.tick(event);
+		Gems.tick(event);
 		Player.tick(event);
 		SpaceRocks.tick(event);
 
@@ -44,6 +45,7 @@ var Game = (function() {
 		Bullets.init();
 		ExhaustParticles.init();
 		ExplosionParticles.init();
+		Gems.init();
 		Player.init();
 		SpaceRocks.init();
 		Weapons.init();
@@ -70,6 +72,7 @@ var Game = (function() {
 			Bullets.reinit();
 			ExhaustParticles.reinit();
 			ExplosionParticles.reinit();
+			Gems.reinit();
 			SpaceRocks.reinit();
 
 			// create the player

@@ -39,6 +39,7 @@
         "Bullet": false,
         "ExhaustParticle": false,
         "ExplosionParticle": false,
+        "Gem": false,
         "RoundGlow": false,
         "Ship": false,
         "SpaceRock": false,
@@ -47,6 +48,7 @@
         "Bullets": false,
         "ExhaustParticles": false,
         "ExplosionParticles": false,
+        "Gems": false,
         "Player": false,
         "SpaceRocks": false,
         "Weapons": false

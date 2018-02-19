@@ -24,7 +24,7 @@ var RoundGlow = (function (window) {
 	p.getShape = function() {
 		this.graphics.clear();
 		this.graphics
-			.beginStroke(SpaceRock.GEM_COLOR)
+			.beginStroke(Gem.COLOR)
 			.drawCircle(0, 0, this.size * 1.5);
 	};
 

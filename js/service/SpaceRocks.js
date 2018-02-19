@@ -9,7 +9,6 @@ var SpaceRocks = (function() {
 	var allRocks = new Set();
 	var timeToRock;
 	var nextRock;
-	var gemSpawned;
 	var c;
 	var s;
 
@@ -31,16 +30,16 @@ var SpaceRocks = (function() {
 			if (spaceRock.active) {
 				spaceRock.tick(event);
 
-				// handle spaceRock ship collisions
-				if (Player.isAlive() && spaceRock.hitRadius(Player.getShip().x, Player.getShip().y, Player.getShip().hit)) {
+				// Handle spaceRock ship collisions
+				if (Player.isAlive() && Engine.hitsRadius(spaceRock, Player.getShip())) {
 					breakRock(spaceRock);
 					continue;
 				}
 				
-				// handle spaceRock bullet collisions
+				// Handle spaceRock bullet collisions
 				for (const bullet of Bullets.getAllBullets()) {
 					if (bullet.active) {
-						if (spaceRock.hitPoint(bullet.x, bullet.y)) {
+						if (Engine.hitsRadius(spaceRock, bullet)) {
 							breakRock(spaceRock);
 							Engine.remove(bullet);
 						}
@@ -54,9 +53,11 @@ var SpaceRocks = (function() {
 		
 	function createNewSpaceRock(size) {
 		var newSpaceRock = new SpaceRock(size);
-		if (!gemSpawned) {
+
+		// Rock will carry Gem if it can spawn
+		if (!Gems.isGemSpawned()) {
 			newSpaceRock.hasGem = true;
-			gemSpawned = true;
+			Gems.setGemSpawned(true);
 		}
 	
 		allRocks.add(newSpaceRock);
@@ -82,12 +83,12 @@ var SpaceRocks = (function() {
 			break;
 		}
 
-		// score
+		// Score
 		if (Player.isAlive()) {
 			Hud.addScore(o.score);
 		}
 
-		// create more
+		// Create more
 		if (newSize > 0) {
 			var i;
 			var offSet;
@@ -102,10 +103,10 @@ var SpaceRocks = (function() {
 		
 		o.explode();
 		
-		// play sound
+		// Play sound
 		Sound.playEffect("break", {offset: 0.8});
 
-		//remove
+		// Remove
 		Engine.remove(o);
 	}
 
@@ -120,16 +121,11 @@ var SpaceRocks = (function() {
 			allRocks.clear();
 			timeToRock = config.ROCK_TIME;
 			nextRock = 0;
-			gemSpawned = false;
 		},
 
 		tick: function(event) {
 			tickNewRocks(event);
 			tickAllRocks(event);
-		},
-
-		setGemSpawned: function(value) {
-			gemSpawned = value;
 		},
 	};
 })();

@@ -6,6 +6,7 @@ var Bullet = (function (window) {
 		this.speed = speed;
 		this.size = size;
 		this.color = color;
+		this.hit = 0;
 		this.activate();
 	}
 	var p = createjs.extend(Bullet, createjs.Shape);
@@ -15,6 +16,7 @@ var Bullet = (function (window) {
 	p.color;
 	p.bounds;
 	p.active;
+	p.hit;
 
 	p.activate = function(x, y, rotation) {
 		this.bounds = this.size;

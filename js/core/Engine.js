@@ -36,5 +36,26 @@ var Engine = (function() {
 				o.y = c.height + bounds * 2;
 			}
 		},
+
+		hitsRadius: function(o1, o2) {
+			// Early returns speed it up
+			if (o2.x - o2.hit > o1.x + o1.hit) {
+				return;
+			}
+			if (o2.x + o2.hit < o1.x - o1.hit) {
+				return;
+			}
+	
+			if (o2.y - o2.hit > o1.y + o1.hit) {
+				return;
+			}
+	
+			if (o2.y + o2.hit < o1.y - o1.hit) {
+				return;
+			}
+	
+			// Now do the circle distance test
+			return o1.hit + o2.hit > Math.sqrt(Math.pow(Math.abs(o1.x - o2.x), 2) + Math.pow(Math.abs(o1.y - o2.y), 2));
+		},
 	};
 })();
