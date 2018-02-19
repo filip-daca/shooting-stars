@@ -42,6 +42,10 @@ var Gem = (function (window) {
 	p.tick = function() {
 		this.move();
 		this.glow();
+
+		if (Engine.outOfBounds(this, this.bounds)) {
+			Engine.placeInBounds(this, this.bounds);
+		}
 	};
 
 	p.move = function() {

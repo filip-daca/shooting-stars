@@ -25,6 +25,7 @@ var Gems = (function() {
 					if (Player.isAlive() && Engine.hitsRadius(gem, Player.getShip())) {
 						gem.collect();
 						Engine.remove(gem);
+						Player.changeRandomWeapon();
 					}
 				} else {
 					allGems.delete(gem);

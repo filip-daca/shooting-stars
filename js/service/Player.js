@@ -41,5 +41,12 @@ var Player = (function() {
 			
 			MainMenu.waitForClickToPlay();
 		},
+
+		changeRandomWeapon: function() {
+			var currentWeapon = ship.getWeapon();
+			while (ship.getWeapon() == currentWeapon) {
+				ship.changeWeapon(Math.floor(Math.random() * 3));
+			}
+		},
 	};
 })();

@@ -5,6 +5,7 @@ var MiniGun = {
 	bulletColor: "#FF33FF",
 	bulletTime: 10,
 	nextBullet: 0,
+	name: "Minigun",
 	
 	fire: function(ship) {
 		var bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
@@ -21,6 +22,7 @@ var ShotGun = {
 	bulletColor: "#AA66FF",
 	bulletTime: 20,
 	nextBullet: 0,
+	name: "Shotgun",
 	
 	fire: function(ship) {
 		var i = 5;
@@ -42,6 +44,7 @@ var ChainGun = {
 	bulletColor: "#88AAFF",
 	bulletTime: 1,
 	nextBullet: 0,
+	name: "Chaingun",
 	
 	fire: function(ship) {
 		var bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
@@ -53,7 +56,7 @@ var ChainGun = {
 
 
 var Weapons = {
-	
+
 	allWeapons: [],
 	
 	init: function() {

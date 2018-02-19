@@ -16,7 +16,7 @@ var Hud = (function() {
 	}
 
 	function initGemScoreField() {
-		gemScoreField = new createjs.Text("0", "bold 42px Courier New", "#FFFFFF");
+		gemScoreField = new createjs.Text("0", "bold 42px 'Courier New'", "#FFFFFF");
 		gemScoreField.textAlign = "center";
 		gemScoreField.x = c.width / 2;
 		gemScoreField.y = 20;

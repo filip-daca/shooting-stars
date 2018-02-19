@@ -152,6 +152,11 @@ var Ship = (function (window) {
 	
 	p.changeWeapon = function (weaponIndex) {
 		this.weapon = Weapons.allWeapons[weaponIndex];
+		Core.debug("#weapon", this.weapon.name);
+	};
+
+	p.getWeapon = function() {
+		return this.weapon;
 	};
 
 	window.Ship = createjs.promote(Ship, "Container");
