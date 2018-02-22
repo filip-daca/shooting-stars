@@ -59,7 +59,7 @@ var MainMenu = (function() {
 			Controller.setConfirmHandle(c.onclick);
 		},
 
-		showMessage(text) {
+		showMessage: function(text) {
 			messageField.text = text;
 			s.update();
 		},

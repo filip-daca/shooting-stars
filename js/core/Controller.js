@@ -99,7 +99,7 @@ var Controller = (function() {
 			}
 		},
 
-		setConfirmHandle(callback) {
+		setConfirmHandle: function(callback) {
 			confirmHandler = callback;
 		},
 	};

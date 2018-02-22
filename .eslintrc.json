@@ -33,6 +33,7 @@
         "Hud": false,
         "Loader": false,
         "MainMenu": false,
+        "Settings": false,
         "Sound": false,
         
         "BackgroundStar": false,

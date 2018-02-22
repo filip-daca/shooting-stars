@@ -1,0 +1,35 @@
+{
+	"engines": {
+		"node": ">= 0.10.0"
+	},
+	"name": "shooting-stars",
+	"description": "An arcade space shooter game.",
+	"version": "0.4.0",
+	"main": "Gruntfile.js",
+	"dependencies": {
+		"createjs": "^1.0.1",
+		"js-cookie": "^2.2.0"
+	},
+	"devDependencies": {
+		"grunt": "~0.4.5",
+		"grunt-contrib-concat": "~0.4.0",
+		"grunt-contrib-jshint": "~0.10.0",
+		"grunt-contrib-qunit": "~0.5.2",
+		"grunt-contrib-uglify-es": "^3.3.0",
+		"grunt-contrib-watch": "~0.6.1",
+		"grunt-lineending": "^1.0.0"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/filip-daca/shooting-stars.git"
+	},
+	"author": "Filip Daca",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/filip-daca/shooting-stars/issues"
+	},
+	"homepage": "https://github.com/filip-daca/shooting-stars#readme"
+}

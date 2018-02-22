@@ -1,0 +1,8 @@
+/assets/
+/dist/
+/node_modules/
+/sounds/*.wav
+/sounds/*.mp3
+/.*/
+/.project
+
