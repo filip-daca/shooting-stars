@@ -35,16 +35,6 @@ module.exports = function(grunt) {
 				dest: "dist/<%= pkg.name %>.min.js"
 			}
 		},
-		watch: {
-			gruntfile: {
-				files: "<%= jshint.gruntfile.src %>",
-				tasks: ["jshint:gruntfile"]
-			},
-			lib_test: {
-				files: "<%= jshint.lib_test.src %>",
-				tasks: ["jshint:lib_test", "qunit"]
-			}
-		},
 		lineending: {
 			dist: {
 				options: {
@@ -57,7 +47,6 @@ module.exports = function(grunt) {
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify-es");
-	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-lineending");
 
 	// Default task.
