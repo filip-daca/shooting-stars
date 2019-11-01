@@ -40,12 +40,13 @@ const Ship = (function (window) {
 	p.makeShape = function () {
 		this.makeBody();
 		this.makeFlame();
+		this.shadow = new createjs.Shadow(Ship.COLOR, 1, 1, 5);
 		this.bounds = 10;
 		this.hit = this.bounds;
 	};
 	
 	p.makeBody = function() {
-		var g = this.shipBody.graphics;
+		const g = this.shipBody.graphics;
 		g.clear();
 		g.beginStroke(Ship.COLOR);
 

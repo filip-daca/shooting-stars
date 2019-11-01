@@ -35,7 +35,9 @@ const Bullet = (function (window) {
 		this.graphics
 			.beginStroke(this.color)
 			.drawCircle(0, 0, this.size);
-		
+
+		this.shadow = new createjs.Shadow(this.color, 1, 1, 5);
+
 		this.cache(-this.bounds * 2, -this.bounds * 2, this.bounds * 4, this.bounds * 4);
 	};
 

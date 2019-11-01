@@ -26,6 +26,7 @@ const RoundGlow = (function (window) {
 		this.graphics
 			.beginStroke(Gem.COLOR)
 			.drawCircle(0, 0, this.size * 1.5);
+		this.shadow = new createjs.Shadow(Gem.COLOR, 1, 1, 5);
 	};
 
 	window.RoundGlow = createjs.promote(RoundGlow, "Shape");

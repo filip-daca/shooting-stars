@@ -27,8 +27,8 @@ const SpaceRock = (function (window) {
 
 	// Handle drawing a spaceRock
 	p.getShape = function (size) {
-		var angle = 0;
-		var radius = size;
+		let angle = 0;
+		let radius = size;
 
 		this.size = size;
 		this.hit = size;
@@ -53,7 +53,9 @@ const SpaceRock = (function (window) {
 			this.hit = (this.hit + radius) / 2; // running average
 		}
 		this.graphics.closePath(); // draw the last line segment back to the start point.
-		
+
+		this.shadow = new createjs.Shadow(SpaceRock.COLOR, 1, 1, 5);
+
 		this.cache(-this.bounds, -this.bounds, 2 * this.bounds, 2 * this.bounds, 2);
 		this.hit *= 1.1; //pad a bit
 	};
@@ -97,7 +99,7 @@ const SpaceRock = (function (window) {
 	};
 
 	p.glow = function() {
-		if (this.glowTimer == 0) {
+		if (this.glowTimer === 0) {
 			this.gemGlow = new RoundGlow(this.x, this.y, this.size, Gem.COLOR);
 			this.glowTimer = Gem.GLOW_INTERVAL;
 		} else {

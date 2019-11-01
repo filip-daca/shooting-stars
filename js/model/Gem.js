@@ -35,7 +35,9 @@ const Gem = (function (window) {
 		this.graphics
 			.beginStroke(Gem.COLOR)
 			.drawCircle(0, 0, this.size);
-		
+
+		this.shadow = new createjs.Shadow(Gem.COLOR, 1, 1, 5);
+
 		this.cache(-this.bounds * 2, -this.bounds * 2, this.bounds * 4, this.bounds * 4);
 	};
 

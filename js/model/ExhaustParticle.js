@@ -37,8 +37,8 @@ const ExhaustParticle = (function (window) {
 		this.graphics
 			.beginStroke(ExhaustParticle.COLOR)
 			.beginFill(ExhaustParticle.COLOR)
-			.drawCircle(0,0,2);
-		
+			.drawCircle(0,0,ExhaustParticle.SIZE);
+
 		this.cache(-this.bounds*2, -this.bounds*2, this.bounds*4, this.bounds*4);
 	};
 	

@@ -12,7 +12,7 @@ const ExplosionParticle = (function (window) {
 	ExplosionParticle.TIME = 60;
 	ExplosionParticle.SPEED = 10;
 	ExplosionParticle.THRUST = 0.92;
-	ExplosionParticle.SIZE = 1;
+	ExplosionParticle.SIZE = 2;
 	
 	p.size;
 	p.bounds;
@@ -36,8 +36,10 @@ const ExplosionParticle = (function (window) {
 	p.getShape = function() {
 		this.graphics
 			.beginStroke(ExplosionParticle.COLOR)
-			.moveTo(-1, 0)
+			.moveTo(-ExplosionParticle.SIZE, 0)
 			.lineTo(0, 0);
+		this.shadow = new createjs.Shadow(ExplosionParticle.COLOR, 1, 1, 5);
+		this.cache(-this.bounds * 2, -this.bounds * 2, this.bounds * 4, this.bounds * 4);
 	};
 	
 	p.tick = function() {
