@@ -1,10 +1,10 @@
 /* exported Core */
-var Core = (function() {
+const Core = (function() {
 	
-	var DEBUG = true;
+	const DEBUG = true;
 
-	var canvas;
-	var stage;
+	let canvas;
+	let stage;
 	
 	return {
 		init: function() {

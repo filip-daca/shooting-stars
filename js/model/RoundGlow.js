@@ -1,5 +1,5 @@
 /* exported RoundGlow */
-var RoundGlow = (function (window) {
+const RoundGlow = (function (window) {
 	function RoundGlow(x, y, size, color) {
 		this.Shape_constructor();
 		this.size = size;
@@ -8,7 +8,7 @@ var RoundGlow = (function (window) {
 		this.y = y;
 		this.activate();
 	}
-	var p = createjs.extend(RoundGlow, createjs.Shape);
+	const p = createjs.extend(RoundGlow, createjs.Shape);
 
 	p.activate = function() {
 		this.getShape();

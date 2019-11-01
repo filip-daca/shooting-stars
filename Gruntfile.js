@@ -43,12 +43,9 @@ module.exports = function(grunt) {
 		}
 	});
 
-	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify-es");
 	grunt.loadNpmTasks("grunt-lineending");
 
-	// Default task.
 	grunt.registerTask("default", ["concat", "uglify", "lineending"]);
-
 };

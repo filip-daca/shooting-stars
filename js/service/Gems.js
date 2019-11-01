@@ -1,9 +1,9 @@
 /* exported Gems */
-var Gems = (function() {
-				
-	var allGems = new Set();
-	var s;
-	var gemSpawned;
+const Gems = (function() {
+
+	const allGems = new Set();
+	let s;
+	let gemSpawned;
 
 	return {
 		init: function() {
@@ -34,8 +34,8 @@ var Gems = (function() {
 			}
 		},
 
-		spawnGem: function(x, y, vX, vY) {	
-			var newGem = new Gem(x, y, vX, vY);
+		spawnGem: function(x, y, vX, vY) {
+			const newGem = new Gem(x, y, vX, vY);
 			newGem.activate();
 			allGems.add(newGem);
 			

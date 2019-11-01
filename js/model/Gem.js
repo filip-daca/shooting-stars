@@ -1,5 +1,5 @@
 /* exported Gem */
-var Gem = (function (window) {
+const Gem = (function (window) {
 
 	function Gem(x, y, vX, vY) {
 		this.Shape_constructor();
@@ -11,7 +11,7 @@ var Gem = (function (window) {
 		this.hit = 20;
 		this.activate();
 	}
-	var p = createjs.extend(Gem, createjs.Shape);
+	const p = createjs.extend(Gem, createjs.Shape);
 
 	Gem.COLOR = "#00FF00";
 	Gem.GLOW_INTERVAL = 20;
@@ -54,7 +54,7 @@ var Gem = (function (window) {
 	};
 
 	p.glow = function() {
-		if (this.glowTimer == 0) {
+		if (this.glowTimer === 0) {
 			this.gemGlow = new RoundGlow(this.x, this.y, Gem.GLOW_SIZE, Gem.COLOR);
 			this.glowTimer = Gem.GLOW_INTERVAL;
 		} else {

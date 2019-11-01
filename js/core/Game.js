@@ -1,8 +1,8 @@
 /* exported Game */
-var Game = (function() {
+const Game = (function() {
 
-	var difficulty = 2;
-	var stage;
+	const difficulty = 2;
+	let stage = null;
 
 	function hasAnyInitErrors() {
 		if (!createjs.Sound.initializeDefaultPlugins()) {
@@ -19,7 +19,6 @@ var Game = (function() {
 	}
 
 	function tick(event) {
-		
 		Background.tick(event);
 		Bullets.tick(event);
 		ExhaustParticles.tick(event);

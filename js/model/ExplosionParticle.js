@@ -1,11 +1,11 @@
 /* exported ExplosionParticle */
-var ExplosionParticle = (function (window) {
+const ExplosionParticle = (function (window) {
 	
 	function ExplosionParticle() {
 		this.Shape_constructor();		
 		this.activate();
 	}
-	var p = createjs.extend(ExplosionParticle, createjs.Shape);
+	const p = createjs.extend(ExplosionParticle, createjs.Shape);
 	
 	ExplosionParticle.COLOR = "#888888";
 	ExplosionParticle.ENTROPY = 40;

@@ -1,8 +1,8 @@
 /* exported ExhaustParticles */
-var ExhaustParticles = (function() {
-		
-	var s;
-	var allParticles = new Set();
+const ExhaustParticles = (function() {
+
+	let s;
+	const allParticles = new Set();
 
 	return {
 		init: function() {
@@ -24,8 +24,8 @@ var ExhaustParticles = (function() {
 			}
 		},
 
-		addParticle: function(x, y, rotation) {	
-			var newParticle = new ExhaustParticle();
+		addParticle: function(x, y, rotation) {
+			const newParticle = new ExhaustParticle();
 	
 			allParticles.add(newParticle);
 			s.addChild(newParticle);

@@ -1,16 +1,16 @@
 /* exported BackgroundStar */
-var BackgroundStar = (function (window) {
+const BackgroundStar = (function (window) {
 	
 	function BackgroundStar() {
 		this.Shape_constructor();		
 		this.activate();
 	}
-	var p = createjs.extend(BackgroundStar, createjs.Shape);
+	const p = createjs.extend(BackgroundStar, createjs.Shape);
 	
 	BackgroundStar.COLOR = "#666666";
 	BackgroundStar.MAX_SPEED = 0.7;
 	BackgroundStar.MAX_SIZE = 4;
-	BackgroundStar.DEPTH_SPEED_FACTOR = 3,
+	BackgroundStar.DEPTH_SPEED_FACTOR = 3;
 	
 	p.size;
 	p.bounds;

@@ -1,14 +1,14 @@
 /* exported Loader */
-var Loader = (function() {
+const Loader = (function() {
 
-	var preload;
+	let preload;
 
 	return {
 		init: function() {},
 
 		startPreload: function(doneCallback, updateCallback) {
-			var assetsPath = "sounds/";
-			var manifest = [
+			let assetsPath = "sounds/";
+			let manifest = [
 				{id: "chaingun", src: "Chaingun.wav", data: 6},
 				{id: "explosion", src: "Explosion.wav", data: 6},
 				{id: "minigun", src: "Minigun.wav", data: 6},

@@ -1,8 +1,8 @@
 /* exported Engine */
-var Engine = (function() {
+const Engine = (function() {
 	
-	var c;
-	var s;
+	let c = null;
+	let s = null;
 
 	return {
 		init: function() {
@@ -42,6 +42,7 @@ var Engine = (function() {
 			if (o2.x - o2.hit > o1.x + o1.hit) {
 				return;
 			}
+
 			if (o2.x + o2.hit < o1.x - o1.hit) {
 				return;
 			}

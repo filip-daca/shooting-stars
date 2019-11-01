@@ -1,5 +1,5 @@
 /* exported Bullet */
-var Bullet = (function (window) {
+const Bullet = (function (window) {
 
 	function Bullet(speed, size, color) {
 		this.Shape_constructor();
@@ -9,7 +9,7 @@ var Bullet = (function (window) {
 		this.hit = 0;
 		this.activate();
 	}
-	var p = createjs.extend(Bullet, createjs.Shape);
+	const p = createjs.extend(Bullet, createjs.Shape);
 
 	p.size;
 	p.speed;
@@ -43,7 +43,7 @@ var Bullet = (function (window) {
 		this.x += this.vX;
 		this.y += this.vY;
 
-		if (this.entropy == 0) {
+		if (this.entropy === 0) {
 			Engine.remove(this);
 		} else {
 			this.entropy--;

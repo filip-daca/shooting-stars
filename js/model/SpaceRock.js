@@ -1,12 +1,12 @@
 /* exported SpaceRock */
-var SpaceRock = (function (window) {
+const SpaceRock = (function (window) {
 
 	function SpaceRock(size) {
 		this.Shape_constructor();
 		this.activate(size);
 	}
 
-	var p = createjs.extend(SpaceRock, createjs.Shape);
+	const p = createjs.extend(SpaceRock, createjs.Shape);
 
 	SpaceRock.COLOR = "#FFFFFF";
 	SpaceRock.LRG_ROCK = 40;

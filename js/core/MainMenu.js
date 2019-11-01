@@ -1,9 +1,9 @@
 /* exported MainMenu */
-var MainMenu = (function() {
+const MainMenu = (function() {
 
-	var c;
-	var s;
-	var messageField;
+	let c;
+	let s;
+	let messageField;
 
 	function initMessageField() {
 		messageField = new createjs.Text("Loading", "bold 24px Arial", "#FFFFFF");

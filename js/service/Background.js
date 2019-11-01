@@ -1,10 +1,10 @@
 /* exported Background */
-var Background = (function() {
+const Background = (function() {
 
-	var s;
-	var timeToStar;
-	var nextStar;
-	var allStars = new Set();
+	let s;
+	let timeToStar;
+	let nextStar;
+	const allStars = new Set();
 
 	function reinit() {
 		timeToStar = 2;
@@ -44,7 +44,7 @@ var Background = (function() {
 		},
 
 		addStar: function() {
-			var newStar = new BackgroundStar();
+			const newStar = new BackgroundStar();
 	
 			allStars.add(newStar);
 			s.addChild(newStar);

@@ -1,11 +1,11 @@
 /* exported ExhaustParticle */
-var ExhaustParticle = (function (window) {
+const ExhaustParticle = (function (window) {
 	
 	function ExhaustParticle() {
 		this.Shape_constructor();		
 		this.activate();
 	}
-	var p = createjs.extend(ExhaustParticle, createjs.Shape);
+	const p = createjs.extend(ExhaustParticle, createjs.Shape);
 	
 	ExhaustParticle.COLOR = "#666666";
 	ExhaustParticle.ENTROPY = 40;

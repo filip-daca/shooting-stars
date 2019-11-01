@@ -1,4 +1,4 @@
-var MiniGun = {
+const MiniGun = {
 
 	bulletSpeed: 11,
 	bulletSize: 3,
@@ -15,7 +15,7 @@ var MiniGun = {
 	}, 	
 };
 
-var ShotGun = {
+const ShotGun = {
 
 	bulletSpeed: 9,
 	bulletSize: 3,
@@ -37,7 +37,7 @@ var ShotGun = {
 	}, 	
 };
 
-var ChainGun = {
+const ChainGun = {
 
 	bulletSpeed: 9,
 	bulletSize: 1,
@@ -47,7 +47,7 @@ var ChainGun = {
 	name: "Chaingun",
 	
 	fire: function(ship) {
-		var bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
+		let bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
 		bullet.activate(ship.x, ship.y, ship.rotation + (Math.random() * 12 - 6));
 		Bullets.addBullet(bullet);
 		Sound.playEffect("chaingun");
@@ -55,7 +55,7 @@ var ChainGun = {
 };
 
 
-var Weapons = {
+const Weapons = {
 
 	allWeapons: [],
 	

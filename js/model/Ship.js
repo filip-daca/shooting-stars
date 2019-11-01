@@ -1,5 +1,5 @@
 /* exported Ship */
-var Ship = (function (window) {
+const Ship = (function (window) {
 
 	function Ship() {
 		this.Container_constructor();
@@ -18,7 +18,7 @@ var Ship = (function (window) {
 		
 		this.changeWeapon(0);
 	}
-	var p = createjs.extend(Ship, createjs.Container);
+	const p = createjs.extend(Ship, createjs.Container);
 
 	Ship.COLOR = "#FFFFFF";
 	Ship.TURN_FACTOR = 4;
@@ -59,12 +59,12 @@ var Ship = (function (window) {
 	};
 	
 	p.makeFlame = function() {
-		var o = this.shipFlame;
+		const o = this.shipFlame;
 		o.scaleX = 0.5;
 		o.scaleY = 0.5;
 		o.y = -5;
 
-		var g = o.graphics;
+		const g = o.graphics;
 		g.clear();
 		g.beginStroke(Ship.COLOR);
 
@@ -91,7 +91,7 @@ var Ship = (function (window) {
 
 			if (this.timeout > Ship.TOGGLE) {
 				this.timeout = 0;
-				if (this.shipFlame.scaleX == 1) {
+				if (this.shipFlame.scaleX === 1) {
 					this.shipFlame.scaleX = 0.5;
 					this.shipFlame.scaleY = 0.5;
 				} else {

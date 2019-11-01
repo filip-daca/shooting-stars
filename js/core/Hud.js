@@ -1,10 +1,10 @@
 /* exported Hud */
-var Hud = (function() {
+const Hud = (function() {
 
-	var c;
-	var s;
-	var scoreField;
-	var gemScoreField;
+	let c;
+	let s;
+	let scoreField;
+	let gemScoreField;
 
 	function initScoreField() {
 		scoreField = new createjs.Text("0", "bold 18px Arial", "#FFFFFF");

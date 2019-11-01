@@ -1,7 +1,7 @@
 /* exported Sound */
-var Sound = (function() {
+const Sound = (function() {
 
-	var volume = 0.5;
+	let volume = 0.5;
 
 	return {
 		init: function() {

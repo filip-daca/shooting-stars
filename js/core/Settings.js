@@ -1,5 +1,5 @@
 /* exported Settings */
-var Settings = (function() {
+const Settings = (function() {
 	
 	return {
 		init: function() {

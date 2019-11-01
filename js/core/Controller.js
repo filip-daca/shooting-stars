@@ -1,7 +1,7 @@
 /* exported Controller */
-var Controller = (function() {
+const Controller = (function() {
 
-	var Keys = {
+	let Keys = {
 		KEYCODE_1:		49,
 		KEYCODE_0:		58,
 		KEYCODE_ENTER: 	13,
@@ -14,16 +14,16 @@ var Controller = (function() {
 		KEYCODE_D: 		68,
 	};
 
-	var confirmHandler;
-	
+	let confirmHandler = null;
+
 	function handleKeyDown(e) {
 		// cross browser issues exist
 		if (!e) {
 			e = window.event;
 		}
-		
+
 		Core.debug("#key-code-pressed", e.keyCode);
-		
+
 		switch (e.keyCode) {
 		case Keys.KEYCODE_SPACE:
 			Controller.state.shootHeld = true;
@@ -44,7 +44,7 @@ var Controller = (function() {
 			handleConfirm();
 			return false;
 		}
-		
+
 		if (e.keyCode >= Keys.KEYCODE_1 && e.keyCode <= Keys.KEYCODE_0) {
 			Player.getShip().changeWeapon(e.keyCode - Keys.KEYCODE_1);
 		}
@@ -94,7 +94,7 @@ var Controller = (function() {
 		},
 
 		clearState: function() {
-			for (var s in Controller.state) {
+			for (let s in Controller.state) {
 				Controller.state[s] = false;
 			}
 		},

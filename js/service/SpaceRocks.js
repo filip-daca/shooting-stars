@@ -1,16 +1,16 @@
 /* exported SpaceRocks */
-var SpaceRocks = (function() {
-	
-	var config = {
+const SpaceRocks = (function() {
+
+	const config = {
 		ROCK_TIME: 220,
 		SUB_ROCK_COUNT: 4,
 	};
-		
-	var allRocks = new Set();
-	var timeToRock;
-	var nextRock;
-	var c;
-	var s;
+
+	let allRocks = new Set();
+	let timeToRock;
+	let nextRock;
+	let c;
+	let s;
 
 	function tickNewRocks() {
 		if (nextRock <= 0) {
@@ -52,7 +52,7 @@ var SpaceRocks = (function() {
 	}
 		
 	function createNewSpaceRock(size) {
-		var newSpaceRock = new SpaceRock(size);
+		const newSpaceRock = new SpaceRock(size);
 
 		// Rock will carry Gem if it can spawn
 		if (!Gems.isGemSpawned()) {
@@ -70,7 +70,7 @@ var SpaceRocks = (function() {
 	}
 	
 	function breakRock(o) {
-		var newSize;
+		let newSize;
 		switch (o.size) {
 		case SpaceRock.LRG_ROCK:
 			newSize = SpaceRock.MED_ROCK;
@@ -90,11 +90,11 @@ var SpaceRocks = (function() {
 
 		// Create more
 		if (newSize > 0) {
-			var i;
-			var offSet;
+			let i;
+			let offSet;
 
 			for (i = 0; i < config.SUB_ROCK_COUNT; i++) {
-				var newSpaceRock = createNewSpaceRock(newSize, o.x, o.y);
+				const newSpaceRock = createNewSpaceRock(newSize, o.x, o.y);
 				offSet = (Math.random() * o.size * 2) - o.size;
 				newSpaceRock.x = o.x + offSet;
 				newSpaceRock.y = o.y + offSet;

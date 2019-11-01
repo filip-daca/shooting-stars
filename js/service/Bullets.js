@@ -1,8 +1,8 @@
 /* exported Bullets */
-var Bullets = (function() {
-				
-	var allBullets = new Set();
-	var s;
+const Bullets = (function() {
+
+	let allBullets = new Set();
+	let s;
 
 	return {
 		init: function() {

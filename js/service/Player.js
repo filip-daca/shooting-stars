@@ -1,10 +1,10 @@
 /* exported Player */
-var Player = (function() {
-	
-	var c;
-	var s;
-	var ship;
-	var alive;
+const Player = (function() {
+
+	let c;
+	let s;
+	let ship;
+	let alive;
 	
 	return {
 
@@ -43,7 +43,7 @@ var Player = (function() {
 		},
 
 		changeRandomWeapon: function() {
-			var currentWeapon = ship.getWeapon();
+			const currentWeapon = ship.getWeapon();
 			while (ship.getWeapon() == currentWeapon) {
 				ship.changeWeapon(Math.floor(Math.random() * 3));
 			}

@@ -1,11 +1,11 @@
 /* exported ExplosionParticles */
-var ExplosionParticles = (function() {
-		
-	var s;
-	var allParticles = new Set();
+const ExplosionParticles = (function() {
+
+	let s;
+	const allParticles = new Set();
 
 	function addParticle(x, y) {
-		var newParticle = new ExplosionParticle();
+		const newParticle = new ExplosionParticle();
 	
 		allParticles.add(newParticle);
 		s.addChild(newParticle);
@@ -35,7 +35,7 @@ var ExplosionParticles = (function() {
 		},
 
 		addExplosion: function(x, y) {
-			var i = 50;
+			let i = 50;
 			while (i > 0) {
 				addParticle(x, y);
 				i-=1;
