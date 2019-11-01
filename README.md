@@ -6,6 +6,9 @@ Play: http://filip-daca.vxm.pl/shooting-stars/
 
 ## Version history
 
+### 0.4.1
+- Fancy graphics but without optimisation
+
 ### 0.4
 - Spawning and collecting gems
 
