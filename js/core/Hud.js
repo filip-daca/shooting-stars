@@ -5,6 +5,7 @@ const Hud = (function() {
 	let s;
 	let scoreField;
 	let gemScoreField;
+	let healthField;
 
 	function initScoreField() {
 		scoreField = new createjs.Text("0", "bold 18px Arial", "#FFFFFF");
@@ -24,6 +25,15 @@ const Hud = (function() {
 		s.addChild(gemScoreField);
 	}
 
+	function initHealthField() {
+		healthField = new createjs.Text("0", "bold 18px Arial", "#FF0000");
+		healthField.textAlign = "left";
+		healthField.x = 20;
+		healthField.y = 20;
+		healthField.maxWidth = 1000;
+		s.addChild(healthField);
+	}
+
 	return {
 		init: function() {
 			c = Core.getCanvas();
@@ -33,6 +43,7 @@ const Hud = (function() {
 		create: function() {
 			initScoreField();
 			initGemScoreField();
+			initHealthField();
 		},
 
 		clearScore: function() {
@@ -46,6 +57,10 @@ const Hud = (function() {
 
 		addGemScore: function() {
 			gemScoreField.text = (Number(gemScoreField.text) + 1).toString();
+		},
+
+		updateHealth: function(value) {
+			healthField.text = value;
 		}
 	};
 })();

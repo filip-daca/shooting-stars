@@ -33,6 +33,7 @@ const SpaceRocks = (function() {
 				// Handle spaceRock ship collisions
 				if (Player.isAlive() && Engine.hitsRadius(spaceRock, Player.getShip())) {
 					breakRock(spaceRock);
+					Player.collideWithRock();
 					continue;
 				}
 				
