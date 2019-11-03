@@ -7,15 +7,16 @@
 	"version": "0.4.1",
 	"main": "Gruntfile.js",
 	"dependencies": {
-		"Filters_for_EaselJS": "github:u-kudox/Filters_for_EaselJS",
 		"createjs": "^1.0.1",
-		"js-cookie": "^2.2.0"
+		"js-cookie": "^2.2.1"
 	},
 	"devDependencies": {
 		"grunt": "^1.0.4",
+		"grunt-contrib-clean": "^2.0.0",
 		"grunt-contrib-concat": "~0.4.0",
 		"grunt-contrib-qunit": "^3.1.0",
 		"grunt-contrib-uglify-es": "^3.3.0",
+		"grunt-contrib-watch": "^1.1.0",
 		"grunt-lineending": "^1.0.0"
 	},
 	"scripts": {
