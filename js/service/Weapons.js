@@ -54,6 +54,41 @@ const ChainGun = {
 	}, 	
 };
 
+const RailGun = {
+
+	bulletSpeed: 30,
+	bulletSize: 5,
+	bulletColor: "#2d4cff",
+	bulletTime: 40,
+	nextBullet: 0,
+	name: "Railgun",
+
+	fire: function(ship) {
+		let bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
+		bullet.collideWithRock = function () {};
+		bullet.activate(ship.x, ship.y, ship.rotation);
+		Bullets.addBullet(bullet);
+	},
+};
+
+const FlameThrower = {
+
+	bulletSpeed: 11,
+	bulletSize: 4,
+	bulletColor: "#ff7700",
+	bulletTime: 1,
+	nextBullet: 0,
+	name: "FlameThrower",
+
+	fire: function(ship) {
+		let bullet = new Bullet(this.bulletSpeed, this.bulletSize, this.bulletColor);
+		bullet.collideWithRock = function () {};
+		bullet.entropy = 20;
+		bullet.activate(ship.x, ship.y, ship.rotation + (Math.random() * 20 - 10));
+		Bullets.addBullet(bullet);
+	},
+};
+
 
 const Weapons = {
 
@@ -63,6 +98,8 @@ const Weapons = {
 		Weapons.allWeapons[0] = MiniGun;
 		Weapons.allWeapons[1] = ShotGun;
 		Weapons.allWeapons[2] = ChainGun;
+		Weapons.allWeapons[3] = RailGun;
+		Weapons.allWeapons[4] = FlameThrower;
 	},
 
 };

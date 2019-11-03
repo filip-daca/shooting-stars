@@ -56,6 +56,10 @@ const Bullet = (function (window) {
 		}
 	};
 
+	p.collideWithRock = function () {
+		Engine.remove(this);
+	};
+
 	window.Bullet = createjs.promote(Bullet, "Shape");
 	return Bullet;
 }(window));

@@ -38,8 +38,8 @@ const ExplosionParticle = (function (window) {
 			.beginStroke(ExplosionParticle.COLOR)
 			.moveTo(-ExplosionParticle.SIZE, 0)
 			.lineTo(0, 0);
-		this.shadow = new createjs.Shadow(ExplosionParticle.COLOR, 1, 1, 5);
-		this.cache(-this.bounds * 2, -this.bounds * 2, this.bounds * 4, this.bounds * 4);
+		// this.shadow = new createjs.Shadow(ExplosionParticle.COLOR, 1, 1, 5);
+		// this.cache(-this.bounds * 2, -this.bounds * 2, this.bounds * 4, this.bounds * 4);
 	};
 	
 	p.tick = function() {

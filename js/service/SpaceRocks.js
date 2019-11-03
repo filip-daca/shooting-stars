@@ -41,7 +41,7 @@ const SpaceRocks = (function() {
 					if (bullet.active) {
 						if (Engine.hitsRadius(spaceRock, bullet)) {
 							breakRock(spaceRock);
-							Engine.remove(bullet);
+							bullet.collideWithRock();
 						}
 					}
 				}
